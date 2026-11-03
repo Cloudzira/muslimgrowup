@@ -897,6 +897,8 @@
               <option value="dark">Gelap</option>
               <option value="light">Light</option>
               <option value="feminine">Feminin</option>
+              <option value="sand">Sand (krem hangat)</option>
+              <option value="ocean">Ocean (biru gelap)</option>
             </select>
           </div>
           <label for="soundSettingsToggle" class="flex items-center justify-between gap-3 cursor-pointer">
@@ -1130,14 +1132,14 @@
     }
 
     function applyTheme(theme) {
-      const availableThemes = ['dark', 'light', 'feminine'];
+      const availableThemes = ['dark', 'light', 'feminine', 'sand', 'ocean'];
       state.theme = availableThemes.includes(theme) ? theme : 'dark';
       document.body.dataset.theme = state.theme;
-      document.documentElement.classList.toggle('dark', state.theme === 'dark');
+      document.documentElement.classList.toggle('dark', ['dark', 'ocean'].includes(state.theme));
 
       const themeSelect = document.getElementById('themeSelect');
       if (themeSelect) themeSelect.value = state.theme;
-      const themeColor = { dark: '#101815', light: '#eef5f0', feminine: '#fff4f7' }[state.theme];
+      const themeColor = { dark: '#101815', light: '#eef5f0', feminine: '#fff4f7', sand: '#f6efe2', ocean: '#0a1520' }[state.theme];
       document.getElementById('themeColorMeta').content = themeColor;
     }
 
@@ -1240,7 +1242,7 @@
             return { ...achievement, unlocked: Boolean(savedAchievement && savedAchievement.unlocked) };
           });
           if (typeof parsed.soundEnabled === 'boolean') state.soundEnabled = parsed.soundEnabled;
-          if (['dark', 'light', 'feminine'].includes(parsed.theme)) state.theme = parsed.theme;
+          if (['dark', 'light', 'feminine', 'sand', 'ocean'].includes(parsed.theme)) state.theme = parsed.theme;
           if (legacyData) saveState();
         } catch (e) {
           console.error("Failed to load local state", e);

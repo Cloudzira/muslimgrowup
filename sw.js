@@ -1,4 +1,4 @@
-const VERSION = 'v5';
+const VERSION = 'v6';
 const SHELL_CACHE = `muslim-grow-up-shell-${VERSION}`;
 const RUNTIME_CACHE = `muslim-grow-up-runtime-${VERSION}`;
 const APP_SHELL = ['./','./index.html','./manifest.webmanifest','./firestore.rules','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png','./assets/futuristic.css','./assets/palette.css','./assets/insights.js','./assets/firebase-config.js','./assets/cloud.js'];

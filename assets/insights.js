@@ -47,7 +47,7 @@
     ['Buka Kebiasaan',()=>switchTab('habitsTab'),'1'],['Buka Statistik',()=>switchTab('statsTab'),'2'],['Buka Pencapaian',()=>switchTab('achievementsTab'),'3'],
     ['Tambah kebiasaan',()=>openHabitModal(),'N'],['Template agenda harian',()=>openHabitTemplateModal(),'T'],
     ['Alat fokus (stopwatch & timer)',()=>openFocusTools(),'F'],['Pengaturan',()=>openSettingsModal(),'S'],
-    ['Tema gelap',()=>setTheme('dark')],['Tema terang',()=>setTheme('light')],['Tema feminin',()=>setTheme('feminine')],
+    ['Tema gelap',()=>setTheme('dark')],['Tema terang',()=>setTheme('light')],['Tema feminin',()=>setTheme('feminine')],['Tema sand',()=>setTheme('sand')],['Tema ocean',()=>setTheme('ocean')],
     ['Ekspor cadangan JSON',()=>exportData(),'E']
   ];
   let sel=0,list=[];

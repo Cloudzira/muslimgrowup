@@ -23,3 +23,47 @@ body[data-theme="light"] .bg-gradient-to-r{background-image:linear-gradient(90de
 body[data-theme="light"] .bg-neonCyan,body[data-theme="light"] .bg-neonGreen{background-color:#5aa688!important}
 body[data-theme="light"] #xpProgressBar,body[data-theme="feminine"] #xpProgressBar{box-shadow:none}
 body[data-theme="light"]::after,body[data-theme="feminine"]::after{opacity:.06}
+body[data-theme="light"] [class~="bg-slate-950"],body[data-theme="light"] [class~="bg-slate-900"],body[data-theme="light"] [class~="bg-slate-800"]{background-color:#fff!important}
+body[data-theme="light"] [class~="bg-slate-950/95"],body[data-theme="light"] [class~="bg-slate-950/90"],body[data-theme="light"] [class~="bg-slate-950/80"],body[data-theme="light"] [class~="bg-slate-950/70"],body[data-theme="light"] [class~="bg-slate-950/60"],body[data-theme="light"] [class~="bg-slate-950/50"],body[data-theme="light"] [class~="bg-slate-900/95"],body[data-theme="light"] [class~="bg-slate-900/90"],body[data-theme="light"] [class~="bg-slate-900/80"],body[data-theme="light"] [class~="bg-slate-900/70"],body[data-theme="light"] [class~="bg-slate-900/60"],body[data-theme="light"] [class~="bg-slate-900/50"],body[data-theme="light"] [class~="bg-slate-800/95"],body[data-theme="light"] [class~="bg-slate-800/90"],body[data-theme="light"] [class~="bg-slate-800/80"],body[data-theme="light"] [class~="bg-slate-800/70"],body[data-theme="light"] [class~="bg-slate-800/60"],body[data-theme="light"] [class~="bg-slate-800/50"]{background-color:rgba(228,238,231,.95)!important}
+body[data-theme="feminine"] [class~="bg-slate-950"],body[data-theme="feminine"] [class~="bg-slate-900"],body[data-theme="feminine"] [class~="bg-slate-800"]{background-color:#fff!important}
+body[data-theme="feminine"] [class~="bg-slate-950/95"],body[data-theme="feminine"] [class~="bg-slate-950/90"],body[data-theme="feminine"] [class~="bg-slate-950/80"],body[data-theme="feminine"] [class~="bg-slate-950/70"],body[data-theme="feminine"] [class~="bg-slate-950/60"],body[data-theme="feminine"] [class~="bg-slate-950/50"],body[data-theme="feminine"] [class~="bg-slate-900/95"],body[data-theme="feminine"] [class~="bg-slate-900/90"],body[data-theme="feminine"] [class~="bg-slate-900/80"],body[data-theme="feminine"] [class~="bg-slate-900/70"],body[data-theme="feminine"] [class~="bg-slate-900/60"],body[data-theme="feminine"] [class~="bg-slate-900/50"],body[data-theme="feminine"] [class~="bg-slate-800/95"],body[data-theme="feminine"] [class~="bg-slate-800/90"],body[data-theme="feminine"] [class~="bg-slate-800/80"],body[data-theme="feminine"] [class~="bg-slate-800/70"],body[data-theme="feminine"] [class~="bg-slate-800/60"],body[data-theme="feminine"] [class~="bg-slate-800/50"]{background-color:rgba(248,229,238,.95)!important}
+
+/* Tema Sand (terang hangat) */
+body[data-theme="sand"]{--logo-color-start:#b98a35;--logo-color-mid:#8a9b45;--logo-color-end:#5f7f3d;--logo-ring:rgba(120,100,50,.45);--logo-wash-start:rgba(185,138,53,.16);--logo-wash-end:rgba(95,127,61,.12);--logo-shadow:rgba(120,100,50,.45);color:#3a2c1c;background-color:#f6efe2;background-image:radial-gradient(at 0% 0%,rgba(201,154,70,.16),transparent 48%),radial-gradient(at 100% 100%,rgba(120,150,80,.12),transparent 45%)}
+body[data-theme="sand"] .glass-panel{background:rgba(255,251,242,.95);border-color:#dccdb0;box-shadow:0 12px 32px rgba(110,80,40,.08)}
+body[data-theme="sand"] .glass-card{background:rgba(255,248,235,.88);border-color:#dccdb0}
+body[data-theme="sand"] [class~="bg-slate-950"],body[data-theme="sand"] [class~="bg-slate-900"],body[data-theme="sand"] [class~="bg-slate-800"]{background-color:#fffaf0!important}
+body[data-theme="sand"] [class~="bg-slate-950/95"],body[data-theme="sand"] [class~="bg-slate-950/90"],body[data-theme="sand"] [class~="bg-slate-950/80"],body[data-theme="sand"] [class~="bg-slate-950/70"],body[data-theme="sand"] [class~="bg-slate-950/60"],body[data-theme="sand"] [class~="bg-slate-950/50"],body[data-theme="sand"] [class~="bg-slate-900/95"],body[data-theme="sand"] [class~="bg-slate-900/90"],body[data-theme="sand"] [class~="bg-slate-900/80"],body[data-theme="sand"] [class~="bg-slate-900/70"],body[data-theme="sand"] [class~="bg-slate-900/60"],body[data-theme="sand"] [class~="bg-slate-900/50"],body[data-theme="sand"] [class~="bg-slate-800/95"],body[data-theme="sand"] [class~="bg-slate-800/90"],body[data-theme="sand"] [class~="bg-slate-800/80"],body[data-theme="sand"] [class~="bg-slate-800/70"],body[data-theme="sand"] [class~="bg-slate-800/60"],body[data-theme="sand"] [class~="bg-slate-800/50"]{background-color:rgba(239,227,203,.92)!important}
+body[data-theme="sand"] .text-slate-100,body[data-theme="sand"] .text-white{color:#3a2c1c!important}
+body[data-theme="sand"] .text-slate-200{color:#4d3a27!important}
+body[data-theme="sand"] .text-slate-300{color:#5a4531!important}
+body[data-theme="sand"] .text-slate-400{color:#66503a!important}
+body[data-theme="sand"] .text-slate-500{color:#6f5a43!important}
+body[data-theme="sand"] [class~="border-slate-700"],body[data-theme="sand"] [class~="border-slate-800"]{border-color:#dccdb0!important}
+body[data-theme="sand"] .text-neonCyan{color:#855410!important}
+body[data-theme="sand"] .text-neonGreen{color:#4f6a1c!important}
+body[data-theme="sand"] .text-neonPink{color:#94392b!important}
+body[data-theme="sand"] .text-neonPurple{color:#6a4a22!important}
+body[data-theme="sand"] .text-amber-400{color:#744500!important}
+body[data-theme="sand"] .text-red-400{color:#a32f2f!important}
+body[data-theme="sand"] .bg-gradient-to-r{background-image:linear-gradient(90deg,#b8862f,#7a9a45)!important}
+body[data-theme="sand"] .bg-neonCyan,body[data-theme="sand"] .bg-neonGreen{background-color:#7a9a45!important}
+body[data-theme="sand"] .rounded-full[class~="bg-slate-800"]{background-color:#e6d9bd!important}
+body[data-theme="sand"] .app-footer{border-color:#dccdb0;color:#66503a}
+body[data-theme="sand"] .footer-social-link{background:rgba(255,248,235,.88);border-color:#dccdb0;color:#5a4531}
+body[data-theme="sand"]::after{opacity:.06}
+
+/* Tema Ocean (gelap biru-teal) */
+body[data-theme="ocean"]{--logo-color-start:#5cc8e6;--logo-color-mid:#6fe0b0;--logo-color-end:#7aa8ff;--logo-ring:rgba(92,200,230,.45);--logo-wash-start:rgba(92,200,230,.16);--logo-wash-end:rgba(122,168,255,.12);--logo-shadow:rgba(92,200,230,.28);color:#e4edf5;background-color:#0a1520;background-image:radial-gradient(at 0% 0%,rgba(46,140,170,.18),transparent 50%),radial-gradient(at 100% 100%,rgba(100,120,220,.12),transparent 50%)}
+body[data-theme="ocean"] .glass-panel{background:rgba(13,27,42,.82);border-color:rgba(140,190,230,.14)}
+body[data-theme="ocean"] .glass-card{background:rgba(22,42,62,.66);border-color:rgba(140,190,230,.1)}
+body[data-theme="ocean"] .text-slate-100{color:#eef4fa}
+body[data-theme="ocean"] .text-slate-300{color:#c3d3e2}
+body[data-theme="ocean"] .text-slate-400{color:#a6b9cc}
+body[data-theme="ocean"] .text-slate-500{color:#8da3b8}
+body[data-theme="ocean"] .text-neonCyan{color:#62d0ee!important}
+body[data-theme="ocean"] .text-neonGreen{color:#78e6b8!important}
+body[data-theme="ocean"] .text-neonPurple{color:#a5b8ff!important}
+body[data-theme="ocean"] .text-neonPink{color:#f4a4ba!important}
+body[data-theme="ocean"]{--mg-a:#62d0ee;--mg-b:#78e6b8;--mg-c:#a5b8ff}
+body[data-theme="sand"]{--mg-a:#855410;--mg-b:#b8862f;--mg-c:#7a9a45}
