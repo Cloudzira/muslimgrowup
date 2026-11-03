@@ -43,7 +43,7 @@
       <div class="mg-insight">${insight(s)} <span style="opacity:.6">Dominan: ${cat}.</span></div>`;
   }
   /* Command palette */
-  const cmds=[
+  const cmds=window.MG_CMDS=[
     ['Buka Kebiasaan',()=>switchTab('habitsTab'),'1'],['Buka Statistik',()=>switchTab('statsTab'),'2'],['Buka Pencapaian',()=>switchTab('achievementsTab'),'3'],
     ['Tambah kebiasaan',()=>openHabitModal(),'N'],['Template agenda harian',()=>openHabitTemplateModal(),'T'],
     ['Alat fokus (stopwatch & timer)',()=>openFocusTools(),'F'],['Pengaturan',()=>openSettingsModal(),'S'],

@@ -23,6 +23,13 @@ Muslim Grow Up is a lightweight habit tracker for building spiritual, learning, 
 - Palet perintah: `Ctrl/Cmd + K` atau tombol ⌘ untuk pindah tab, tambah kebiasaan, tema, fokus, ekspor.
 - Service worker v2 meng-cache modul baru. Modul baru hanya membaca `state` sehingga data lama tetap aman.
 
+## Firebase, notifikasi & offline (v3)
+
+1. Firebase Console: buat project, aktifkan Authentication > Google, buat Firestore, lalu tempel isi `firestore.rules` di tab Rules.
+2. Isi `assets/firebase-config.js` dengan konfigurasi Web App, dan tambahkan domain hosting Anda di Authentication > Authorized domains.
+3. Buka app, tekan tombol ☁ (atau Ctrl+K), lalu Masuk dengan Google. Data tersinkron real-time dan aman dari konflik sederhana (versi terbaru menang).
+4. Pengingat pagi/sore diatur dari panel ☁. Offline: service worker v3 menyimpan app dan dependensi CDN setelah kunjungan online pertama.
+
 ## Run
 
 Open `index.html` in a modern browser. The interface loads Tailwind CSS and Lucide icons from CDNs, so an internet connection is needed for full styling and icons.
