@@ -1,8 +1,10 @@
-const CACHE_NAME = 'muslim-grow-up-shell-v1';
+const CACHE_NAME = 'muslim-grow-up-shell-v2';
 const APP_SHELL = [
   './index.html',
   './manifest.webmanifest',
   './assets/icon.svg',
+  './assets/futuristic.css',
+  './assets/insights.js',
   './assets/icon-192.png',
   './assets/icon-512.png'
 ];

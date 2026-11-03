@@ -1,0 +1,48 @@
+/* Muslim Grow Up - lapisan visual futuristik (tidak mengubah logika app) */
+:root{--mg-a:#55d6a7;--mg-b:#e8b75a;--mg-c:#7aa8ff}
+body[data-theme="light"]{--mg-a:#2f8f6f;--mg-b:#b98a35;--mg-c:#4f7fd6}
+body[data-theme="feminine"]{--mg-a:#c0608c;--mg-b:#d78eae;--mg-c:#8c628b}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+ background:radial-gradient(40vmax 40vmax at 15% 10%,color-mix(in srgb,var(--mg-a) 22%,transparent),transparent 70%),
+ radial-gradient(35vmax 35vmax at 90% 85%,color-mix(in srgb,var(--mg-c) 16%,transparent),transparent 70%);
+ animation:mgAurora 18s ease-in-out infinite alternate}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;
+ background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+ background-size:42px 42px;-webkit-mask-image:radial-gradient(ellipse at top,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse at top,#000 20%,transparent 75%)}
+body[data-theme="light"]::after,body[data-theme="feminine"]::after{opacity:.12}
+@keyframes mgAurora{to{transform:translate3d(2%,-2%,0) scale(1.08)}}
+.glass-panel{position:relative;transition:transform .25s,box-shadow .25s,border-color .25s}
+.glass-panel::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+ background:linear-gradient(135deg,color-mix(in srgb,var(--mg-a) 55%,transparent),transparent 40%,color-mix(in srgb,var(--mg-b) 40%,transparent));
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.glass-card{transition:transform .2s,border-color .2s,box-shadow .2s}
+.glass-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--mg-a) 50%,transparent);box-shadow:0 8px 28px -10px var(--mg-a)}
+#xpProgressBar{background:linear-gradient(90deg,var(--mg-b),var(--mg-a),var(--mg-c));background-size:200% 100%;animation:mgFlow 4s linear infinite;box-shadow:0 0 14px var(--mg-a)}
+@keyframes mgFlow{to{background-position:200% 0}}
+button{transition:transform .15s,filter .15s}button:active{transform:scale(.96)}
+:focus-visible{outline:2px solid var(--mg-a);outline-offset:2px}
+/* Command Center */
+.mg-cc{display:grid;gap:14px;grid-template-columns:auto 1fr;align-items:center;padding:18px;border-radius:18px}
+.mg-ring{width:96px;height:96px;position:relative}
+.mg-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.mg-ring .t{stroke:rgba(127,150,140,.22)}
+.mg-ring .p{stroke:url(#mgGrad);stroke-linecap:round;transition:stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 0 6px var(--mg-a))}
+.mg-ring b{position:absolute;inset:0;display:grid;place-items:center;font:600 20px 'Fira Code',monospace}
+.mg-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mg-kpi{padding:8px 10px;border-radius:12px;background:rgba(127,150,140,.12);text-align:center}
+.mg-kpi small{display:block;font-size:10px;opacity:.65;letter-spacing:.06em;text-transform:uppercase}
+.mg-kpi strong{font:600 16px 'Fira Code',monospace;color:var(--mg-a)}
+.mg-insight{grid-column:1/-1;font-size:13px;line-height:1.5;padding:10px 12px;border-radius:12px;border:1px dashed color-mix(in srgb,var(--mg-a) 45%,transparent)}
+/* Command palette */
+#mgPalette{position:fixed;inset:0;z-index:100;display:none;align-items:flex-start;justify-content:center;padding:12vh 16px;background:rgba(5,10,8,.6);backdrop-filter:blur(6px)}
+#mgPalette.open{display:flex}
+#mgPalette .box{width:100%;max-width:520px;border-radius:16px;overflow:hidden}
+#mgPalette input{width:100%;padding:16px;background:transparent;border:0;border-bottom:1px solid rgba(127,150,140,.25);color:inherit;font-size:16px;outline:0}
+#mgPalette ul{max-height:50vh;overflow:auto;margin:0;padding:6px;list-style:none}
+#mgPalette li{padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;font-size:14px}
+#mgPalette li.on,#mgPalette li:hover{background:color-mix(in srgb,var(--mg-a) 20%,transparent)}
+#mgPalette kbd{font:11px 'Fira Code',monospace;opacity:.6}
+#mgFab{position:fixed;right:16px;bottom:16px;z-index:60;width:48px;height:48px;border-radius:50%;border:1px solid var(--mg-a);background:rgba(16,24,21,.85);color:var(--mg-a);box-shadow:0 0 18px -2px var(--mg-a);font:600 18px 'Fira Code',monospace}
+body[data-theme="light"] #mgFab,body[data-theme="feminine"] #mgFab{background:#fff}
+@media(max-width:420px){.mg-cc{grid-template-columns:1fr;justify-items:center}.mg-kpis{width:100%}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}

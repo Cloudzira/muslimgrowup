@@ -16,6 +16,13 @@ Muslim Grow Up is a lightweight habit tracker for building spiritual, learning, 
 - Export and import a JSON backup from Settings.
 - Use the responsive interface on desktop or mobile.
 
+## Pembaruan v2
+
+- Lapisan visual futuristik terpisah (`assets/futuristic.css`): aurora, grid, border neon, progress XP beranimasi, mendukung 3 tema dan `prefers-reduced-motion`.
+- Command Center (`assets/insights.js`): ring progres hari ini, konsistensi 7 hari, streak terbaik, dan insight otomatis.
+- Palet perintah: `Ctrl/Cmd + K` atau tombol ⌘ untuk pindah tab, tambah kebiasaan, tema, fokus, ekspor.
+- Service worker v2 meng-cache modul baru. Modul baru hanya membaca `state` sehingga data lama tetap aman.
+
 ## Run
 
 Open `index.html` in a modern browser. The interface loads Tailwind CSS and Lucide icons from CDNs, so an internet connection is needed for full styling and icons.
