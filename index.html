@@ -45,6 +45,13 @@
 
   <style>
     body {
+      --logo-color-start: #e8b75a;
+      --logo-color-mid: #a7d979;
+      --logo-color-end: #55d6a7;
+      --logo-ring: rgba(167, 217, 121, 0.44);
+      --logo-wash-start: rgba(232, 183, 90, 0.16);
+      --logo-wash-end: rgba(85, 214, 167, 0.12);
+      --logo-shadow: rgba(85, 214, 167, 0.28);
       font-family: 'Inter', sans-serif;
       background-color: #0b0f19;
       background-image: 
@@ -70,19 +77,116 @@
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
+    body[data-theme="light"] {
+      --logo-color-start: #b98a35;
+      --logo-color-mid: #6b9b58;
+      --logo-color-end: #347e66;
+      --logo-ring: rgba(53, 108, 76, 0.48);
+      --logo-wash-start: rgba(185, 138, 53, 0.16);
+      --logo-wash-end: rgba(52, 126, 102, 0.12);
+      --logo-shadow: rgba(52, 126, 102, 0.22);
+      color: #26382e;
+      background-color: #eef5f0;
+      background-image: radial-gradient(at 0% 0%, rgba(114, 175, 137, 0.16), transparent 48%), radial-gradient(at 100% 100%, rgba(206, 177, 108, 0.12), transparent 45%);
+    }
+
+    body[data-theme="feminine"] {
+      --logo-color-start: #9c456c;
+      --logo-color-mid: #d78eae;
+      --logo-color-end: #8c628b;
+      --logo-ring: rgba(140, 75, 110, 0.5);
+      --logo-wash-start: rgba(156, 69, 108, 0.14);
+      --logo-wash-end: rgba(215, 142, 174, 0.16);
+      --logo-shadow: rgba(156, 69, 108, 0.24);
+      color: #412b36;
+      background-color: #fff4f7;
+      background-image: radial-gradient(at 0% 0%, rgba(231, 160, 190, 0.2), transparent 48%), radial-gradient(at 100% 100%, rgba(191, 139, 181, 0.14), transparent 45%);
+    }
+
+    body[data-theme="light"] .glass-panel {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(82, 116, 94, 0.16);
+      box-shadow: 0 12px 32px rgba(49, 79, 58, 0.07);
+    }
+
+    body[data-theme="light"] .glass-card {
+      background: rgba(255, 255, 255, 0.76);
+      border-color: rgba(82, 116, 94, 0.14);
+    }
+
+    body[data-theme="feminine"] .glass-panel {
+      background: rgba(255, 250, 252, 0.92);
+      border-color: rgba(157, 90, 121, 0.2);
+      box-shadow: 0 12px 32px rgba(117, 61, 88, 0.08);
+    }
+
+    body[data-theme="feminine"] .glass-card {
+      background: rgba(255, 247, 250, 0.82);
+      border-color: rgba(157, 90, 121, 0.16);
+    }
+
+    body[data-theme="light"] .text-slate-100 { color: #26382e !important; }
+    body[data-theme="light"] .text-slate-200 { color: #3e5547 !important; }
+    body[data-theme="light"] .text-slate-300 { color: #53685b !important; }
+    body[data-theme="light"] .text-slate-400 { color: #65796c !important; }
+    body[data-theme="feminine"] .text-slate-400 { color: #806775 !important; }
+    body[data-theme="light"] .text-slate-500 { color: #78897e !important; }
+    body[data-theme="feminine"] .text-slate-500 { color: #927986 !important; }
+    body[data-theme="feminine"] .text-slate-100 { color: #432c3a !important; }
+    body[data-theme="feminine"] .text-slate-200 { color: #604454 !important; }
+    body[data-theme="feminine"] .text-slate-300 { color: #735665 !important; }
+
+    body[data-theme="light"] [class~="bg-slate-950"],
+    body[data-theme="light"] [class~="bg-slate-900"],
+    body[data-theme="light"] [class~="bg-slate-800"],
+    body[data-theme="feminine"] [class~="bg-slate-950"],
+    body[data-theme="feminine"] [class~="bg-slate-900"],
+    body[data-theme="feminine"] [class~="bg-slate-800"] { background-color: #fff !important; }
+
+    body[data-theme="light"] [class~="bg-slate-900/60"],
+    body[data-theme="light"] [class~="bg-slate-800/80"] { background-color: rgba(231, 240, 234, 0.88) !important; }
+    body[data-theme="feminine"] [class~="bg-slate-900/60"],
+    body[data-theme="feminine"] [class~="bg-slate-800/80"] { background-color: rgba(250, 232, 240, 0.88) !important; }
+
+    body[data-theme="light"] [class~="border-slate-700"],
+    body[data-theme="light"] [class~="border-slate-800"] { border-color: #d7e3da !important; }
+    body[data-theme="feminine"] [class~="border-slate-700"],
+    body[data-theme="feminine"] [class~="border-slate-800"] { border-color: #ead4df !important; }
+
+    body[data-theme="light"] .text-neonCyan { color: #176444 !important; }
+    body[data-theme="light"] .text-neonGreen { color: #456b31 !important; }
+    body[data-theme="light"] .text-neonPink { color: #99453c !important; }
+    body[data-theme="light"] .text-neonPurple { color: #735514 !important; }
+    body[data-theme="light"] .text-amber-400 { color: #76500b !important; }
+    body[data-theme="light"] .text-red-400 { color: #a32f2f !important; }
+    body[data-theme="feminine"] .text-neonCyan,
+    body[data-theme="feminine"] .text-neonGreen { color: #853553 !important; }
+    body[data-theme="feminine"] .text-neonPink { color: #8f3158 !important; }
+    body[data-theme="feminine"] .text-neonPurple { color: #75446c !important; }
+    body[data-theme="feminine"] .bg-gradient-to-r { background-image: linear-gradient(90deg, #b95f88, #e6a4bd) !important; }
+    body[data-theme="feminine"] .bg-neonCyan,
+    body[data-theme="feminine"] .bg-neonGreen { background-color: #efb5c8 !important; }
+    body[data-theme="feminine"] .text-amber-400 { color: #96621f !important; }
+    body[data-theme="feminine"] .text-red-400 { color: #a33e59 !important; }
+
+    body[data-theme="light"] .app-footer { border-color: rgba(82, 116, 94, 0.2); color: #65796c; }
+    body[data-theme="feminine"] .app-footer { border-color: rgba(157, 90, 121, 0.2); color: #806775; }
+    body[data-theme="light"] .footer-social-link { background: rgba(255, 255, 255, 0.8); border-color: #d7e3da; color: #486353; }
+    body[data-theme="feminine"] .footer-social-link { background: rgba(255, 250, 252, 0.9); border-color: #ead4df; color: #704b60; }
+
     .brand-mark {
       position: relative;
       isolation: isolate;
       overflow: hidden;
-      background: linear-gradient(145deg, #e8b75a, #a7d979 62%, #55d6a7);
-      box-shadow: 0 0 24px rgba(85, 214, 167, 0.28), inset 0 1px rgba(255, 255, 255, 0.55);
+      background: linear-gradient(145deg, var(--logo-color-start), var(--logo-color-mid) 62%, var(--logo-color-end));
+      box-shadow: 0 0 24px var(--logo-shadow), inset 0 1px rgba(255, 255, 255, 0.55);
     }
 
     .brand-mark::before,
     .brand-mark::after {
       position: absolute;
       content: "";
-      border: 1px solid rgba(16, 24, 21, 0.3);
+      border: 1px solid var(--logo-ring);
       border-radius: 50%;
       inset: 5px -5px;
       transform: rotate(-35deg);
@@ -145,17 +249,17 @@
       aspect-ratio: 1;
       place-items: center;
       margin-bottom: 28px;
-      border: 1px solid rgba(167, 217, 121, 0.45);
+      border: 1px solid var(--logo-ring);
       border-radius: 30px;
-      background: linear-gradient(145deg, rgba(232, 183, 90, 0.16), rgba(85, 214, 167, 0.12));
-      box-shadow: 0 0 50px rgba(85, 214, 167, 0.12), inset 0 0 25px rgba(167, 217, 121, 0.06);
+      background: linear-gradient(145deg, var(--logo-wash-start), var(--logo-wash-end));
+      box-shadow: 0 0 50px var(--logo-shadow), inset 0 0 25px var(--logo-wash-end);
     }
 
     .splash-logo::before {
       position: absolute;
       inset: -13px;
       content: "";
-      border: 1px solid rgba(85, 214, 167, 0.38);
+      border: 1px solid var(--logo-ring);
       border-radius: 50%;
       transform: rotateX(68deg) rotate(-24deg);
       animation: orbit-turn 12s linear infinite;
@@ -169,8 +273,8 @@
       aspect-ratio: 1;
       content: "";
       border-radius: 50%;
-      background: #e8b75a;
-      box-shadow: 0 0 12px rgba(232, 183, 90, 0.8);
+      background: var(--logo-color-start);
+      box-shadow: 0 0 12px var(--logo-shadow);
     }
 
     .splash-logo .brand-mark {
@@ -180,7 +284,7 @@
     }
 
     .splash-kicker {
-      color: #a7d979;
+      color: var(--logo-color-mid);
       font: 600 10px 'Fira Code', monospace;
       letter-spacing: 0.18em;
       text-transform: uppercase;
@@ -194,7 +298,7 @@
     }
 
     .splash-title span {
-      color: #a7d979;
+      color: var(--logo-color-mid);
     }
 
     .splash-caption {
@@ -215,7 +319,7 @@
       display: block;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, #e8b75a, #a7d979, #55d6a7);
+      background: linear-gradient(90deg, var(--logo-color-start), var(--logo-color-mid), var(--logo-color-end));
       transform: scaleX(0);
       transform-origin: left;
       animation: splash-load 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -337,7 +441,7 @@
       </div>
       <p class="splash-kicker">Ruang tumbuh harian</p>
       <h2 id="splashTitle" class="splash-title">MUSLIM <span>GROW UP</span></h2>
-      <p class="splash-caption">Tumbuh baik, satu hari sekali</p>
+      <p class="splash-caption">Tumbuh baik setiap hari</p>
       <div class="splash-loader" role="progressbar" aria-label="Menyiapkan aplikasi"><span></span></div>
     </div>
   </div>
@@ -355,7 +459,7 @@
           <h1 class="text-lg font-bold tracking-wide text-slate-100">
             MUSLIM <span class="text-neonGreen">GROW UP</span>
           </h1>
-          <p class="text-xs text-slate-400">Tumbuh baik, satu hari sekali</p>
+          <p class="text-xs text-slate-400">Tumbuh baik setiap hari</p>
         </div>
       </div>
       <div class="flex space-x-2">
@@ -584,7 +688,6 @@
 
   <footer class="app-footer px-4">
     <nav aria-label="Media sosial Kurniapedia">
-      <p class="text-[10px] font-mono-tech text-slate-500">TEMUKAN KURNIAPEDIA</p>
       <div id="socialLinks" class="footer-social-links"></div>
     </nav>
     <p class="app-footer-credit">Crafted with <span class="footer-heart" aria-label="cinta">♥</span> by <a href="https://kurniapedia.my.id" target="_blank" rel="noopener noreferrer">Kurniapedia</a> 2026</p>
@@ -777,6 +880,14 @@
             <label for="displayNameInput" class="block text-xs font-semibold text-slate-300 mb-1">NAMA SAPAAN</label>
             <input id="displayNameInput" type="text" maxlength="40" placeholder="Nama Anda" onchange="saveDisplayName(this.value)" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-neonCyan">
           </div>
+          <div>
+            <label for="themeSelect" class="block text-xs font-semibold text-slate-300 mb-1">TEMA TAMPILAN</label>
+            <select id="themeSelect" onchange="setTheme(this.value)" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-neonCyan">
+              <option value="dark">Gelap</option>
+              <option value="light">Light</option>
+              <option value="feminine">Feminin</option>
+            </select>
+          </div>
           <label for="soundSettingsToggle" class="flex items-center justify-between gap-3 cursor-pointer">
             <span>
               <span class="block text-xs font-semibold text-slate-300">Efek suara</span>
@@ -833,6 +944,7 @@
     
     let state = {
       soundEnabled: true,
+      theme: 'dark',
       user: {
         displayName: 'Sahabat',
         xp: 0,
@@ -959,6 +1071,7 @@
     // --- INITIALIZATION ---
     window.onload = function() {
       loadState();
+      applyTheme(state.theme);
       renderAll();
       renderSocialLinks();
       initLucide();
@@ -981,6 +1094,16 @@
         now.getHours(), now.getMinutes(), now.getSeconds()
       ].map(value => String(value).padStart(2, '0')).join(':');
       document.getElementById('greetingMessage').innerText = `Selamat ${greeting}, semoga hari ini penuh kebaikan.`;
+    }
+
+    function applyTheme(theme) {
+      const availableThemes = ['dark', 'light', 'feminine'];
+      state.theme = availableThemes.includes(theme) ? theme : 'dark';
+      document.body.dataset.theme = state.theme;
+      document.documentElement.classList.toggle('dark', state.theme === 'dark');
+
+      const themeSelect = document.getElementById('themeSelect');
+      if (themeSelect) themeSelect.value = state.theme;
     }
 
     function finishSplash() {
@@ -1055,6 +1178,7 @@
             return { ...achievement, unlocked: Boolean(savedAchievement && savedAchievement.unlocked) };
           });
           if (typeof parsed.soundEnabled === 'boolean') state.soundEnabled = parsed.soundEnabled;
+          if (['dark', 'light', 'feminine'].includes(parsed.theme)) state.theme = parsed.theme;
           if (legacyData) saveState();
         } catch (e) {
           console.error("Failed to load local state", e);
@@ -1905,7 +2029,13 @@
     function openSettingsModal() {
       document.getElementById('displayNameInput').value = state.user.displayName || 'Sahabat';
       document.getElementById('soundSettingsToggle').checked = state.soundEnabled;
+      document.getElementById('themeSelect').value = state.theme || 'dark';
       openModal('settingsModal');
+    }
+
+    function setTheme(theme) {
+      applyTheme(theme);
+      saveState();
     }
 
     function saveDisplayName(value) {
