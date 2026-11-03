@@ -93,11 +93,8 @@
     $('#mgEve').onchange=e=>{rem().evening=e.target.value;saveState();};
     $('#mgTest').onclick=async()=>{ if(!window.Notification)return; if(Notification.permission!=='granted'&&await Notification.requestPermission()!=='granted')return; notify('Muslim Grow Up','Notifikasi berfungsi dengan baik.','mg-test'); };
   }
-  const fab=document.createElement('button'); fab.type='button'; fab.id='mgCloudFab'; fab.textContent='☁'; fab.setAttribute('aria-label','Sinkron, notifikasi & offline');
-  fab.style.cssText='position:fixed;right:16px;bottom:72px;z-index:60;width:48px;height:48px;border-radius:50%;border:1px solid var(--mg-a);background:rgba(16,24,21,.85);color:var(--mg-a);font-size:20px;box-shadow:0 0 18px -2px var(--mg-a)';
-  fab.onclick=panel; document.body.appendChild(fab);
+  window.MG_OPEN_CLOUD=panel;
   if(window.MG_CMDS) window.MG_CMDS.push(['Sinkron, notifikasi & offline',panel,'C']);
-  const dot=()=>{fab.style.opacity=navigator.onLine?1:.55; fab.style.borderStyle=navigator.onLine?'solid':'dashed';};
-  addEventListener('online',()=>{dot();initFirebase();}); addEventListener('offline',dot); dot();
+  addEventListener('online',initFirebase);
   if(hasCfg&&navigator.onLine) initFirebase();
 })();

@@ -68,7 +68,7 @@
       const lis=[...p.querySelectorAll('li')];
       if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); sel=(sel+(e.key==='ArrowDown'?1:-1)+lis.length)%lis.length; lis.forEach((l,i)=>l.classList.toggle('on',i===sel)); }
       else if(e.key==='Enter')run(sel); else if(e.key==='Escape')close(); });
-    const fab=document.createElement('button'); fab.id='mgFab'; fab.type='button'; fab.textContent='⌘'; fab.setAttribute('aria-label','Buka palet perintah'); fab.onclick=open; document.body.appendChild(fab);
+    window.MG_OPEN_PALETTE=open;
     document.addEventListener('keydown',e=>{ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); open(); } });
   }
   /* Sambungkan ke siklus render inti */

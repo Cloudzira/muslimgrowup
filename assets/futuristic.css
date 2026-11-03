@@ -42,7 +42,5 @@ button{transition:transform .15s,filter .15s}button:active{transform:scale(.96)}
 #mgPalette li{padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;font-size:14px}
 #mgPalette li.on,#mgPalette li:hover{background:color-mix(in srgb,var(--mg-a) 20%,transparent)}
 #mgPalette kbd{font:11px 'Fira Code',monospace;opacity:.6}
-#mgFab{position:fixed;right:16px;bottom:16px;z-index:60;width:48px;height:48px;border-radius:50%;border:1px solid var(--mg-a);background:rgba(16,24,21,.85);color:var(--mg-a);box-shadow:0 0 18px -2px var(--mg-a);font:600 18px 'Fira Code',monospace}
-body[data-theme="light"] #mgFab,body[data-theme="feminine"] #mgFab{background:#fff}
 @media(max-width:420px){.mg-cc{grid-template-columns:1fr;justify-items:center}.mg-kpis{width:100%}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
