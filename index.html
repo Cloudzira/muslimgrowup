@@ -436,6 +436,7 @@
     }
   </style>
   <link rel="stylesheet" href="./assets/futuristic.css">
+  <link rel="stylesheet" href="./assets/palette.css">
 </head>
 <body class="text-slate-100 min-h-screen pb-24 md:pb-8">
 
@@ -563,20 +564,6 @@
           </button>
         </div>
       </div>
-
-      <section class="glass-panel p-4 sm:p-5 rounded-2xl" aria-labelledby="dailyProgressTitle">
-        <div class="flex items-start justify-between gap-3">
-          <div>
-            <h2 id="dailyProgressTitle" class="text-sm font-bold text-slate-100">Progres hari ini</h2>
-            <p id="dailyProgressSummary" class="text-xs text-slate-400 mt-1">0 dari 0 kegiatan selesai</p>
-          </div>
-          <span id="dailyProgressPercent" class="text-xl font-bold font-mono-tech text-neonGreen">0%</span>
-        </div>
-        <div class="w-full h-2 mt-3 bg-slate-800 rounded-full overflow-hidden" role="img" aria-label="Grafik progres harian">
-          <div id="dailyProgressBar" class="h-full rounded-full bg-gradient-to-r from-neonCyan to-neonGreen transition-all duration-500" style="width: 0%"></div>
-        </div>
-        <div id="dailyProgressGraph" class="mt-4 space-y-3"></div>
-      </section>
 
       <!-- Empty State -->
       <div id="emptyHabitState" class="hidden text-center py-12 glass-panel rounded-2xl border-dashed border-slate-700">
@@ -1342,7 +1329,6 @@
     function renderAll() {
       renderHeaderStats();
       renderHabitsList();
-      renderDailyProgressChart();
       renderStatsTab();
       renderAchievements();
       initLucide();
@@ -1458,49 +1444,6 @@
       initLucide();
     }
 
-    function renderDailyProgressChart() {
-      const today = new Date();
-      const todayKey = getTodayKey();
-      const scheduledHabits = state.habits.filter(habit => isHabitScheduled(habit, today));
-      const completedHabits = scheduledHabits.filter(habit => habit.history && habit.history[todayKey] === true);
-      const total = scheduledHabits.length;
-      const completed = completedHabits.length;
-      const percent = total ? Math.round((completed / total) * 100) : 0;
-      const totalMinutes = scheduledHabits.reduce((sum, habit) => sum + (Number(habit.durationMinutes) || 0), 0);
-      const completedMinutes = completedHabits.reduce((sum, habit) => sum + (Number(habit.durationMinutes) || 0), 0);
-
-      document.getElementById('dailyProgressPercent').innerText = `${percent}%`;
-      document.getElementById('dailyProgressSummary').innerText = total
-        ? `${completed} dari ${total} kegiatan selesai · ${completedMinutes} dari ${totalMinutes} menit target`
-        : 'Tambahkan kegiatan untuk melihat progres harian.';
-      document.getElementById('dailyProgressBar').style.width = `${percent}%`;
-
-      const groupedHabits = new Map();
-      scheduledHabits.forEach(habit => {
-        const group = habit.timeBlock || 'Rutinitas fleksibel';
-        if (!groupedHabits.has(group)) groupedHabits.set(group, []);
-        groupedHabits.get(group).push(habit);
-      });
-      const groupOrder = [
-        ...TIMELINE_GROUPS.filter(group => groupedHabits.has(group)),
-        ...Array.from(groupedHabits.keys()).filter(group => !TIMELINE_GROUPS.includes(group))
-      ];
-
-      document.getElementById('dailyProgressGraph').innerHTML = groupOrder.map(group => {
-        const habits = groupedHabits.get(group);
-        const groupCompleted = habits.filter(habit => habit.history && habit.history[todayKey] === true).length;
-        const groupPercent = Math.round((groupCompleted / habits.length) * 100);
-        return `
-          <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1.5 items-center">
-            <span class="truncate text-[10px] text-slate-400">${escapeHtml(group)}</span>
-            <span class="text-[10px] font-mono-tech text-slate-300">${groupCompleted}/${habits.length}</span>
-            <div class="col-span-2 h-1.5 bg-slate-800 rounded-full overflow-hidden" role="img" aria-label="${escapeHtml(group)}: ${groupCompleted} dari ${habits.length} kegiatan selesai">
-              <div class="h-full rounded-full bg-neonGreen transition-all duration-500" style="width: ${groupPercent}%"></div>
-            </div>
-          </div>
-        `;
-      }).join('') || '<p class="text-[11px] text-slate-500">Grafik akan tampil setelah Anda menambahkan kegiatan.</p>';
-    }
 
     function toggleHabit(id) {
       const todayKey = getTodayKey();

@@ -1,0 +1,25 @@
+/* Palet warna v2: kontras teks >= 4.5:1, latar lebih lembut, aksen konsisten emerald-gold. */
+body{color:#e6ece9}
+body:not([data-theme]),body[data-theme="dark"]{background-color:#0c1412;
+ background-image:radial-gradient(at 0% 0%,rgba(52,126,102,.16),transparent 50%),radial-gradient(at 100% 100%,rgba(185,138,53,.09),transparent 50%)}
+body:not([data-theme]) .glass-panel,body[data-theme="dark"] .glass-panel{background:rgba(18,28,25,.78)}
+body:not([data-theme]) .glass-card,body[data-theme="dark"] .glass-card{background:rgba(30,44,40,.62)}
+body:not([data-theme]) .text-slate-100,body[data-theme="dark"] .text-slate-100{color:#eef3f0}
+body:not([data-theme]) .text-slate-400,body[data-theme="dark"] .text-slate-400{color:#a3b3ac}
+body:not([data-theme]) .text-slate-500,body[data-theme="dark"] .text-slate-500{color:#8b9bb0}
+body[data-theme="light"]{color:#1f3128;background-color:#f2f6f1;
+ background-image:radial-gradient(at 0% 0%,rgba(52,126,102,.12),transparent 48%),radial-gradient(at 100% 100%,rgba(185,138,53,.10),transparent 45%)}
+body[data-theme="light"] .glass-panel{background:rgba(255,255,255,.94);border-color:rgba(60,95,75,.18)}
+body[data-theme="light"] .text-slate-100{color:#1f3128!important}
+body[data-theme="light"] .text-slate-300{color:#3f564a!important}
+body[data-theme="light"] .text-slate-400{color:#4b6054!important}
+body[data-theme="light"] .text-slate-500{color:#587063!important}
+body[data-theme="feminine"] .text-slate-400{color:#6d5262!important}
+body[data-theme="feminine"] .text-slate-500{color:#775c6a!important}
+/* Bar progres: trek terlihat jelas & isi bergradasi emerald-gold */
+body[data-theme="light"] .rounded-full[class~="bg-slate-800"]{background-color:#dbe7df!important}
+body[data-theme="feminine"] .rounded-full[class~="bg-slate-800"]{background-color:#f1dce6!important}
+body[data-theme="light"] .bg-gradient-to-r{background-image:linear-gradient(90deg,#2f8f6f,#b98a35)!important}
+body[data-theme="light"] .bg-neonCyan,body[data-theme="light"] .bg-neonGreen{background-color:#5aa688!important}
+body[data-theme="light"] #xpProgressBar,body[data-theme="feminine"] #xpProgressBar{box-shadow:none}
+body[data-theme="light"]::after,body[data-theme="feminine"]::after{opacity:.06}

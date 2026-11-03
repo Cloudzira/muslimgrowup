@@ -1,7 +1,7 @@
-const VERSION = 'v3';
+const VERSION = 'v4';
 const SHELL_CACHE = `muslim-grow-up-shell-${VERSION}`;
 const RUNTIME_CACHE = `muslim-grow-up-runtime-${VERSION}`;
-const APP_SHELL = ['./','./index.html','./manifest.webmanifest','./firestore.rules','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png','./assets/futuristic.css','./assets/insights.js','./assets/firebase-config.js','./assets/cloud.js'];
+const APP_SHELL = ['./','./index.html','./manifest.webmanifest','./firestore.rules','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png','./assets/futuristic.css','./assets/palette.css','./assets/insights.js','./assets/firebase-config.js','./assets/cloud.js'];
 // Dependensi CDN: di-cache saat install agar app jalan penuh offline.
 const CDN = ['https://cdn.tailwindcss.com','https://unpkg.com/lucide@latest','https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js','https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap'];
 const CDN_HOSTS = ['cdn.tailwindcss.com','unpkg.com','cdn.jsdelivr.net','fonts.googleapis.com','fonts.gstatic.com','www.gstatic.com'];
