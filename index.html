@@ -9,6 +9,10 @@
   <meta name="apple-mobile-web-app-title" content="Muslim Grow Up">
   <link rel="icon" type="image/svg+xml" href="./assets/icon.svg">
   <link rel="apple-touch-icon" href="./assets/icon-192.png">
+    <meta name="description" content="Muslim Grow Up: pelacak kebiasaan harian Muslim dengan streak, statistik, pengingat, dan sinkronisasi antar perangkat.">
+  <meta property="og:title" content="Muslim Grow Up">
+  <meta property="og:description" content="Bangun kebiasaan baik harian secara konsisten, ringan, dan privat.">
+  <meta property="og:type" content="website">
   <link rel="manifest" href="./manifest.webmanifest">
   
   <!-- Tailwind CSS CDN -->
@@ -2094,8 +2098,9 @@
       reader.onload = function(e) {
         try {
           const imported = JSON.parse(e.target.result);
-          if (imported && imported.habits) {
-            state = imported;
+          if (imported && Array.isArray(imported.habits)) {
+            // Gabungkan dengan struktur default agar cadangan lama/parsial tidak merusak app
+            state = Object.assign({}, state, imported, { user: Object.assign({}, state.user, imported.user || {}) });
             saveState();
             renderAll();
             closeModal('settingsModal');
