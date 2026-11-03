@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muslim Grow Up - Tracker Kebiasaan</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            neonCyan: '#55D6A7',
+            neonGreen: '#A7D979',
+            neonPink: '#F2A58A',
+            neonPurple: '#E8B75A',
+            neonGold: '#E8B75A',
+            darkBg: '#101815',
+            cardBg: 'rgba(25, 36, 31, 0.82)',
+          },
+          boxShadow: {
+            glowCyan: '0 0 15px rgba(85, 214, 167, 0.25)',
+            glowGreen: '0 0 15px rgba(167, 217, 121, 0.25)',
+            glowPink: '0 0 15px rgba(242, 165, 138, 0.2)',
+            glowGold: '0 0 15px rgba(232, 183, 90, 0.25)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Google Fonts Inter & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f19;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(43, 110, 77, 0.16) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(183, 129, 50, 0.1) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+    
+    .font-mono-tech {
+      font-family: 'Fira Code', monospace;
+    }
+
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .glass-card {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .brand-mark {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background: linear-gradient(145deg, #e8b75a, #a7d979 62%, #55d6a7);
+      box-shadow: 0 0 24px rgba(85, 214, 167, 0.28), inset 0 1px rgba(255, 255, 255, 0.55);
+    }
+
+    .brand-mark::before,
+    .brand-mark::after {
+      position: absolute;
+      content: "";
+      border: 1px solid rgba(16, 24, 21, 0.3);
+      border-radius: 50%;
+      inset: 5px -5px;
+      transform: rotate(-35deg);
+    }
+
+    .brand-mark::after {
+      inset: -5px 5px;
+      transform: rotate(35deg);
+    }
+
+    .brand-mark-icon {
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 1px 2px rgba(16, 24, 21, 0.25));
+    }
+
+    .splash-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #101815;
+      transition: opacity 450ms ease, visibility 450ms ease;
+    }
+
+    .splash-screen::before {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background-image:
+        linear-gradient(rgba(167, 217, 121, 0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(167, 217, 121, 0.055) 1px, transparent 1px),
+        radial-gradient(ellipse at 50% 42%, rgba(85, 214, 167, 0.15), transparent 55%);
+      background-size: 42px 42px, 42px 42px, auto;
+      mask-image: radial-gradient(ellipse at center, #000 15%, transparent 78%);
+    }
+
+    .splash-screen.is-leaving {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .splash-content {
+      position: relative;
+      display: flex;
+      width: min(100% - 40px, 360px);
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      animation: splash-arrive 650ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+    }
+
+    .splash-logo {
+      position: relative;
+      display: grid;
+      width: 104px;
+      aspect-ratio: 1;
+      place-items: center;
+      margin-bottom: 28px;
+      border: 1px solid rgba(167, 217, 121, 0.45);
+      border-radius: 30px;
+      background: linear-gradient(145deg, rgba(232, 183, 90, 0.16), rgba(85, 214, 167, 0.12));
+      box-shadow: 0 0 50px rgba(85, 214, 167, 0.12), inset 0 0 25px rgba(167, 217, 121, 0.06);
+    }
+
+    .splash-logo::before {
+      position: absolute;
+      inset: -13px;
+      content: "";
+      border: 1px solid rgba(85, 214, 167, 0.38);
+      border-radius: 50%;
+      transform: rotateX(68deg) rotate(-24deg);
+      animation: orbit-turn 12s linear infinite;
+    }
+
+    .splash-logo::after {
+      position: absolute;
+      top: -17px;
+      right: 12px;
+      width: 7px;
+      aspect-ratio: 1;
+      content: "";
+      border-radius: 50%;
+      background: #e8b75a;
+      box-shadow: 0 0 12px rgba(232, 183, 90, 0.8);
+    }
+
+    .splash-logo .brand-mark {
+      width: 62px;
+      height: 62px;
+      border-radius: 20px;
+    }
+
+    .splash-kicker {
+      color: #a7d979;
+      font: 600 10px 'Fira Code', monospace;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .splash-title {
+      margin-top: 10px;
+      color: #f1f5f2;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .splash-title span {
+      color: #a7d979;
+    }
+
+    .splash-caption {
+      margin-top: 8px;
+      color: #9aa8a0;
+      font-size: 13px;
+    }
+
+    .splash-loader {
+      width: 172px;
+      height: 2px;
+      margin-top: 34px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .splash-loader span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #e8b75a, #a7d979, #55d6a7);
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: splash-load 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .splash-skip {
+      margin-top: 20px;
+      padding: 8px 12px;
+      color: #aab8b0;
+      font-size: 11px;
+      transition: color 150ms ease;
+    }
+
+    .splash-skip:hover,
+    .splash-skip:focus-visible {
+      color: #a7d979;
+    }
+
+    @keyframes splash-arrive {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes splash-load {
+      to { transform: scaleX(1); }
+    }
+
+    @keyframes orbit-turn {
+      to { rotate: 360deg; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .splash-content,
+      .splash-logo::before,
+      .splash-loader span {
+        animation-duration: 1ms;
+      }
+
+      .splash-screen {
+        transition-duration: 1ms;
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00F0FF;
+    }
+  </style>
+</head>
+<body class="text-slate-100 min-h-screen pb-24 md:pb-8">
+
+  <div id="splashScreen" class="splash-screen" role="dialog" aria-modal="true" aria-labelledby="splashTitle">
+    <div class="splash-content">
+      <div class="splash-logo" aria-hidden="true">
+        <div class="brand-mark grid place-items-center text-slate-950">
+          <i data-lucide="sprout" class="brand-mark-icon w-9 h-9 stroke-[2.2]"></i>
+        </div>
+      </div>
+      <p class="splash-kicker">Ruang tumbuh harian</p>
+      <h2 id="splashTitle" class="splash-title">MUSLIM <span>GROW UP</span></h2>
+      <p class="splash-caption">Tumbuh baik, satu hari sekali</p>
+      <div class="splash-loader" role="progressbar" aria-label="Menyiapkan aplikasi"><span></span></div>
+      <button class="splash-skip" onclick="finishSplash()">Lewati intro <span aria-hidden="true">→</span></button>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="max-w-md mx-auto md:max-w-4xl px-4 pt-4">
+
+    <!-- Top Navigation / Header -->
+    <header class="flex items-center justify-between mb-4 glass-panel p-4 rounded-2xl shadow-lg border-slate-800">
+      <div class="flex items-center space-x-3">
+        <div class="brand-mark w-10 h-10 rounded-xl flex items-center justify-center text-slate-950 font-bold">
+          <i data-lucide="sprout" class="brand-mark-icon w-6 h-6 stroke-[2.5]"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-wide text-slate-100">
+            MUSLIM <span class="text-neonGreen">GROW UP</span>
+          </h1>
+          <p class="text-xs text-slate-400">Tumbuh baik, satu hari sekali</p>
+        </div>
+      </div>
+      <div class="flex space-x-2">
+        <button onclick="toggleSound()" id="soundBtn" title="Toggle Sound FX" class="p-2.5 rounded-xl glass-card hover:border-neonCyan transition text-slate-300">
+          <i data-lucide="volume-2" id="soundIcon" class="w-5 h-5"></i>
+        </button>
+        <button onclick="openModal('settingsModal')" title="Settings" class="p-2.5 rounded-xl glass-card hover:border-neonCyan transition text-slate-300">
+          <i data-lucide="settings" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Personal progress summary -->
+    <section class="glass-panel p-5 rounded-2xl mb-6 shadow-xl relative overflow-hidden">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center space-x-3.5">
+          <!-- Avatar Icon -->
+          <div class="relative">
+            <div id="avatarContainer" class="w-14 h-14 rounded-2xl bg-slate-900 border-2 border-neonCyan flex items-center justify-center text-neonCyan shadow-glowCyan">
+              <i data-lucide="shield" class="w-8 h-8"></i>
+            </div>
+            <span id="levelBadge" class="absolute -bottom-2 -right-1 bg-neonGreen text-slate-950 text-xs font-bold px-1.5 py-0.5 rounded-md font-mono-tech shadow-glowGreen">
+              LVL 1
+            </span>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 id="rankTitle" class="font-bold text-base text-slate-100">Pemula</h2>
+              <span id="streakBadge" class="text-xs bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full flex items-center gap-1 font-mono-tech">
+                <i data-lucide="flame" class="w-3.5 h-3.5 fill-amber-400"></i> <span id="maxStreakText">0 Hari</span>
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5" id="userTitleDesc">Bangun kebiasaan baik dengan langkah kecil yang konsisten.</p>
+          </div>
+        </div>
+
+        <div class="text-right">
+          <div class="text-xs text-slate-400 font-mono-tech">POIN PROGRES</div>
+          <div id="totalXpText" class="text-xl font-bold font-mono-tech text-neonCyan">0 XP</div>
+        </div>
+      </div>
+
+      <!-- XP Progress Bar -->
+      <div class="mt-4">
+        <div class="flex justify-between text-xs font-mono-tech mb-1">
+          <span class="text-slate-400">PROGRESS LEVEL</span>
+          <span id="xpProgressText" class="text-neonGreen">0 / 200 XP</span>
+        </div>
+        <div class="w-full bg-slate-800/80 h-3 rounded-full overflow-hidden p-0.5 border border-slate-700">
+          <div id="xpProgressBar" class="bg-gradient-to-r from-neonCyan via-neonPurple to-neonGreen h-full rounded-full transition-all duration-500 w-0 shadow-glowCyan"></div>
+        </div>
+        <p class="text-[10px] text-slate-500 mt-2">Poin hanya untuk memantau progres kebiasaan, bukan ukuran nilai ibadah.</p>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <div class="flex bg-slate-900/80 p-1 rounded-xl mb-6 border border-slate-800">
+      <button onclick="switchTab('habitsTab')" id="btnHabitsTab" class="flex-1 py-2.5 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2 bg-slate-800 text-neonCyan shadow">
+        <i data-lucide="check-square" class="w-4 h-4"></i> Kebiasaan
+      </button>
+      <button onclick="switchTab('statsTab')" id="btnStatsTab" class="flex-1 py-2.5 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2 text-slate-400 hover:text-slate-200">
+        <i data-lucide="bar-chart-3" class="w-4 h-4"></i> Grafik & Heatmap
+      </button>
+      <button onclick="switchTab('achievementsTab')" id="btnAchievementsTab" class="flex-1 py-2.5 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2 text-slate-400 hover:text-slate-200">
+        <i data-lucide="award" class="w-4 h-4"></i> Lencana
+      </button>
+    </div>
+
+    <!-- TAB 1: HABITS LIST & MANAGEMENT -->
+    <main id="habitsTab" class="space-y-4">
+      <!-- Date Selector Strip -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 glass-card p-3.5 rounded-xl">
+        <div class="flex items-center gap-2">
+          <i data-lucide="calendar" class="w-5 h-5 text-neonCyan"></i>
+          <span id="currentDateDisplay" class="text-sm font-semibold font-mono-tech text-slate-200">Hari Ini</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="openHabitTemplateModal()" class="bg-slate-800 text-slate-200 border border-slate-700 font-semibold text-xs px-3 py-2 rounded-lg flex items-center justify-center gap-1.5 hover:border-neonGreen transition">
+            <i data-lucide="list-checks" class="w-4 h-4"></i> Pilih Template
+          </button>
+          <button onclick="openHabitModal()" class="bg-gradient-to-r from-neonCyan to-cyan-500 text-slate-950 font-bold text-xs px-3 py-2 rounded-lg flex items-center justify-center gap-1.5 shadow-glowCyan hover:opacity-90 transition">
+            <i data-lucide="plus" class="w-4 h-4 stroke-[3]"></i> Buat Sendiri
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyHabitState" class="hidden text-center py-12 glass-panel rounded-2xl border-dashed border-slate-700">
+        <div class="w-16 h-16 mx-auto mb-3 text-slate-600 bg-slate-800/50 rounded-full flex items-center justify-center">
+          <i data-lucide="list-todo" class="w-8 h-8"></i>
+        </div>
+        <h3 class="text-base font-semibold text-slate-300">Belum ada kebiasaan</h3>
+        <p class="text-xs text-slate-500 mt-1 max-w-xs mx-auto">Mulai perjalanan gamifikasi Anda dengan menambah kebiasaan harian pertama.</p>
+        <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4">
+          <button onclick="openHabitTemplateModal()" class="text-xs font-semibold text-neonGreen hover:underline">PILIH TEMPLATE</button>
+          <button onclick="openHabitModal()" class="text-xs font-semibold text-neonCyan hover:underline">BUAT KEBIASAAN SENDIRI</button>
+        </div>
+      </div>
+
+      <!-- Habit Cards Container -->
+      <div id="habitsListContainer" class="space-y-3">
+        <!-- Dynamic Habit Cards Rendered Here -->
+      </div>
+    </main>
+
+    <!-- TAB 2: STATISTICS & VISUAL CHARTS -->
+    <main id="statsTab" class="hidden space-y-6">
+      <!-- Overview Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="glass-card p-4 rounded-xl border border-slate-800">
+          <div class="text-xs text-slate-400">Total Kebiasaan</div>
+          <div id="statTotalHabits" class="text-2xl font-bold font-mono-tech text-slate-100 mt-1">0</div>
+        </div>
+        <div class="glass-card p-4 rounded-xl border border-slate-800">
+          <div class="text-xs text-slate-400">Selesai Hari Ini</div>
+          <div id="statCompletedToday" class="text-2xl font-bold font-mono-tech text-neonGreen mt-1">0</div>
+        </div>
+        <div class="glass-card p-4 rounded-xl border border-slate-800">
+          <div class="text-xs text-slate-400">Rata-rata Kelengkapan</div>
+          <div id="statCompletionRate" class="text-2xl font-bold font-mono-tech text-neonCyan mt-1">0%</div>
+        </div>
+        <div class="glass-card p-4 rounded-xl border border-slate-800">
+          <div class="text-xs text-slate-400">Lencana Terbuka</div>
+          <div id="statBadgesUnlocked" class="text-2xl font-bold font-mono-tech text-neonPink mt-1">0/6</div>
+        </div>
+      </div>
+
+      <!-- Weekly Completion Bar Chart -->
+      <div class="glass-panel p-5 rounded-2xl">
+        <h3 class="text-sm font-bold text-slate-200 mb-4 font-mono-tech flex items-center gap-2">
+          <i data-lucide="bar-chart-2" class="w-4 h-4 text-neonCyan"></i> AKTIVITAS 7 HARI TERAKHIR
+        </h3>
+        <div class="h-44 w-full relative">
+          <canvas id="weeklyChart" class="w-full h-full"></canvas>
+        </div>
+      </div>
+
+      <!-- Heatmap Grid (30 Days Activity) -->
+      <div class="glass-panel p-5 rounded-2xl">
+        <h3 class="text-sm font-bold text-slate-200 mb-3 font-mono-tech flex items-center gap-2">
+          <i data-lucide="grid" class="w-4 h-4 text-neonGreen"></i> HEATMAP KONSISTENSI (30 HARI)
+        </h3>
+        <p class="text-xs text-slate-400 mb-4">Warna hijau neon yang makin terang menandakan semakin banyak kebiasaan diselesaikan.</p>
+        <div id="heatmapGrid" class="grid grid-cols-10 md:grid-cols-15 gap-1.5 justify-center">
+          <!-- Heatmap Cells injected by JS -->
+        </div>
+      </div>
+    </main>
+
+    <!-- TAB 3: ACHIEVEMENTS & BADGES -->
+    <main id="achievementsTab" class="hidden space-y-4">
+      <div class="glass-panel p-4 rounded-2xl mb-4">
+        <h3 class="text-sm font-bold text-slate-200 font-mono-tech">LENCANA PENCAPAIAN</h3>
+        <p class="text-xs text-slate-400 mt-0.5">Catat langkah kecil yang konsisten untuk membuka lencana dan poin bonus.</p>
+      </div>
+
+      <div id="achievementsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <!-- Rendered dynamically -->
+      </div>
+    </main>
+
+  </div>
+
+  <!-- MODAL: HABIT TEMPLATES -->
+  <div id="habitTemplateModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <section class="glass-panel p-5 sm:p-6 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-slate-700 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="habitTemplateTitle">
+      <div class="flex justify-between items-start gap-4 mb-2">
+        <div>
+          <h3 id="habitTemplateTitle" class="text-base font-bold text-slate-100">Template Kebiasaan Harian</h3>
+          <p class="text-xs text-slate-400 mt-1">Pilih yang sesuai dengan kondisi dan ritme Anda. Mulai dari sedikit dulu.</p>
+        </div>
+        <button onclick="closeModal('habitTemplateModal')" title="Tutup" aria-label="Tutup template" class="p-1 text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="flex gap-3 mb-4 text-xs">
+        <button onclick="setHabitTemplateSelection(true)" class="text-neonGreen hover:underline">Pilih semua</button>
+        <button onclick="setHabitTemplateSelection(false)" class="text-slate-400 hover:text-white">Hapus pilihan</button>
+      </div>
+      <div id="habitTemplateGroups" class="space-y-5"></div>
+      <p id="habitTemplateFeedback" class="min-h-5 text-xs text-neonGreen mt-4" aria-live="polite"></p>
+      <div class="flex justify-end gap-2 border-t border-slate-700 pt-4 mt-2">
+        <button onclick="closeModal('habitTemplateModal')" class="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white">Selesai</button>
+        <button id="addSelectedTemplatesBtn" onclick="addSelectedHabitTemplates()" disabled class="bg-neonGreen text-slate-950 font-bold text-xs px-4 py-2 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed">
+          Tambahkan pilihan (<span id="selectedTemplateCount">0</span>)
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <!-- MODAL: ADD HABIT -->
+  <div id="addHabitModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-panel p-6 rounded-2xl w-full max-w-md border border-slate-700 shadow-2xl relative">
+      <div class="flex justify-between items-center mb-4">
+        <h3 id="habitModalTitle" class="text-base font-bold text-slate-100 font-mono-tech flex items-center gap-2">
+          <i data-lucide="plus-circle" class="w-5 h-5 text-neonCyan"></i> Kebiasaan Baru
+        </h3>
+        <button onclick="closeModal('addHabitModal')" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="addHabitForm" onsubmit="handleCreateHabit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-mono-tech text-slate-300 mb-1">NAMA KEBIASAAN</label>
+          <input type="text" id="habitNameInput" required placeholder="Contoh: Sholat Tepat Waktu / Baca 10 Halaman" 
+            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-neonCyan transition">
+        </div>
+
+        <!-- Category Dropdown with Custom Input Support -->
+        <div>
+          <label class="block text-xs font-mono-tech text-slate-300 mb-1">KATEGORI & PRESET</label>
+          <select id="habitCategorySelect" onchange="handleCategorySelectChange(this)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-neonCyan transition">
+            <option value="worship">🌙 Ibadah & Spiritual</option>
+            <option value="fitness">💪 Olahraga & Kesehatan</option>
+            <option value="reading">📚 Membaca Buku & Belajar</option>
+            <option value="meditation">🧘 Refleksi & Ketenangan</option>
+            <option value="productivity">⚡ Produktivitas</option>
+            <option value="other">✨ Kebiasaan Lainnya</option>
+            <option value="custom">+ Buat kategori sendiri...</option>
+          </select>
+          
+          <!-- Hidden input for custom category name -->
+          <input type="text" id="customCategoryInput" placeholder="Nama kategori..." 
+            class="hidden mt-2 w-full bg-slate-900 border border-neonPurple rounded-xl px-3.5 py-2 text-xs text-slate-100 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-mono-tech text-slate-300 mb-1">TARGET FREKUENSI</label>
+            <select id="habitFrequency" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-neonCyan">
+              <option value="daily">Setiap Hari</option>
+              <option value="weekdays">Hari Kerja (Senin - Jumat)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-mono-tech text-slate-300 mb-1">REWARD XP</label>
+            <select id="habitXpReward" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-neonCyan">
+              <option value="10">10 XP (Mudah)</option>
+              <option value="25" selected>25 XP (Sedang)</option>
+              <option value="50">50 XP (Sulit)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pt-2 flex justify-end space-x-2">
+          <button type="button" onclick="closeModal('addHabitModal')" class="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white">Batal</button>
+          <button id="habitSubmitBtn" type="submit" class="bg-neonCyan text-slate-950 font-bold text-xs px-5 py-2.5 rounded-xl shadow-glowCyan hover:opacity-90 transition">
+            Simpan Kebiasaan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: SETTINGS & DATA -->
+  <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-panel p-6 rounded-2xl w-full max-w-md border border-slate-700 shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-base font-bold text-slate-100 font-mono-tech flex items-center gap-2">
+          <i data-lucide="sliders" class="w-5 h-5 text-neonCyan"></i> Pengaturan
+        </h3>
+        <button onclick="closeModal('settingsModal')" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div class="p-3.5 bg-slate-900/60 rounded-xl border border-slate-800">
+          <h4 class="text-xs font-semibold text-slate-300 mb-1 font-mono-tech">BACKUP & RESTORE DATA</h4>
+          <p class="text-xs text-slate-500 mb-3">Ekspor data Anda ke file JSON untuk dicadangkan atau dipindahkan ke perangkat lain.</p>
+          <div class="flex gap-2">
+            <button onclick="exportData()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs py-2 px-3 rounded-lg border border-slate-700 flex items-center justify-center gap-1 font-mono-tech transition">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i> Ekspor JSON
+            </button>
+            <label class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs py-2 px-3 rounded-lg border border-slate-700 flex items-center justify-center gap-1 cursor-pointer font-mono-tech transition">
+              <i data-lucide="upload" class="w-3.5 h-3.5"></i> Impor JSON
+              <input type="file" id="importFile" accept=".json" onchange="importData(event)" class="hidden">
+            </label>
+          </div>
+        </div>
+
+        <div class="p-3.5 bg-red-950/20 rounded-xl border border-red-900/40">
+          <h4 class="text-xs font-semibold text-red-400 mb-1 font-mono-tech">RESET PROGRESS</h4>
+          <p class="text-xs text-slate-500 mb-3">Hapus seluruh level, total XP, dan riwayat kebiasaan dari awal.</p>
+          <button onclick="resetAllData()" class="w-full bg-red-600/20 hover:bg-red-600/40 text-red-400 border border-red-500/40 text-xs py-2 rounded-lg font-mono-tech transition">
+            RESET DATA SEKARANG
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEVEL UP OVERLAY NOTIFICATION -->
+  <div id="levelUpOverlay" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-lg hidden flex flex-col items-center justify-center text-center p-6">
+    <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-neonGreen to-neonCyan flex items-center justify-center text-slate-950 mb-4 shadow-glowGreen animate-bounce">
+      <i data-lucide="trophy" class="w-12 h-12 stroke-[2.5]"></i>
+    </div>
+    <h2 class="text-3xl font-black font-mono-tech text-transparent bg-clip-text bg-gradient-to-r from-neonGreen via-neonCyan to-neonPink">
+      LEVEL UP!
+    </h2>
+    <p class="text-slate-300 font-mono-tech text-base mt-2" id="newLevelText">Selamat! Level Anda bertambah.</p>
+    <p class="text-xs text-slate-400 mt-2 max-w-xs">Setiap langkah kecil membantu membangun kebiasaan baik.</p>
+    <button onclick="closeLevelUpModal()" class="mt-6 bg-neonGreen text-slate-950 font-bold px-8 py-3 rounded-xl font-mono-tech shadow-glowGreen hover:scale-105 transition">
+    LANJUTKAN
+    </button>
+  </div>
+
+  <!-- JAVASCRIPT APP LOGIC -->
+  <script>
+    // --- APP STATE & STORAGE KEY ---
+    const STORAGE_KEY = 'MUSLIM_GROW_UP_V1_DATA';
+    const LEGACY_STORAGE_KEY = 'CYBERHABIT_V2_DATA';
+    
+    let state = {
+      soundEnabled: true,
+      user: {
+        xp: 0,
+        level: 1,
+        totalHabitsCompleted: 0
+      },
+      habits: [],
+      achievements: [
+        { id: 'first_step', title: 'Langkah Pertama', desc: 'Catat kebiasaan baik pertama', exp: 50, icon: 'footprints', unlocked: false },
+        { id: 'streak_3', title: 'Mulai Istiqamah', desc: 'Jaga satu kebiasaan selama 3 hari', exp: 100, icon: 'flame', unlocked: false },
+        { id: 'streak_7', title: 'Tujuh Hari Bertumbuh', desc: 'Jaga satu kebiasaan selama 7 hari', exp: 200, icon: 'calendar-check', unlocked: false },
+        { id: 'level_5', title: 'Tumbuh Pesat', desc: 'Capai level 5', exp: 300, icon: 'crown', unlocked: false },
+        { id: 'habits_5', title: 'Langkah Beragam', desc: 'Miliki 5 kebiasaan aktif', exp: 150, icon: 'layers', unlocked: false },
+        { id: 'master_50', title: 'Konsisten Berproses', desc: 'Selesaikan 50 kebiasaan', exp: 500, icon: 'shield-check', unlocked: false }
+      ]
+    };
+    let editingHabitId = null;
+
+    // Category Styling Map
+    const CATEGORY_MAP = {
+      worship: { label: 'Ibadah', icon: 'moon', color: 'text-amber-400 border-amber-400/40 bg-amber-400/10' },
+      fitness: { label: 'Olahraga', icon: 'dumbbell', color: 'text-neonCyan border-neonCyan/40 bg-neonCyan/10' },
+      reading: { label: 'Membaca', icon: 'book-open', color: 'text-neonGreen border-neonGreen/40 bg-neonGreen/10' },
+      meditation: { label: 'Refleksi', icon: 'heart', color: 'text-neonPurple border-neonPurple/40 bg-neonPurple/10' },
+      productivity: { label: 'Produktivitas', icon: 'zap', color: 'text-neonPink border-neonPink/40 bg-neonPink/10' },
+      other: { label: 'Lainnya', icon: 'sparkles', color: 'text-slate-300 border-slate-500/40 bg-slate-800' }
+    };
+
+    const HABIT_TEMPLATES = [
+      { id: 'read_pages', group: 'Kecerdasan Otak', name: 'Membaca buku 10 halaman', detail: 'Luangkan sekitar 15 menit untuk membaca.', category: 'reading', xpReward: 10 },
+      { id: 'learn_daily', group: 'Kecerdasan Otak', name: 'Belajar hal baru 20 menit', detail: 'Pilih satu topik dan belajar tanpa distraksi.', category: 'reading', xpReward: 25 },
+      { id: 'write_reflection', group: 'Kecerdasan Otak', name: 'Tulis satu hal yang dipelajari', detail: 'Ringkas pelajaran hari ini dengan kata-kata sendiri.', category: 'reading', xpReward: 10 },
+      { id: 'prayer_on_time', group: 'Ruhani & Hati', name: 'Menjaga sholat fardu tepat waktu', detail: 'Bangun rutinitas sholat sesuai kemampuan dan keadaan.', category: 'worship', xpReward: 25 },
+      { id: 'quran_reading', group: 'Ruhani & Hati', name: 'Tilawah Al-Qur’an 10 menit', detail: 'Baca dengan tenang; sesuaikan target dengan kemampuan.', category: 'worship', xpReward: 25 },
+      { id: 'daily_dhikr', group: 'Ruhani & Hati', name: 'Dzikir atau doa dengan tenang', detail: 'Sediakan beberapa menit untuk mengingat Allah.', category: 'worship', xpReward: 10 },
+      { id: 'gratitude', group: 'Ruhani & Hati', name: 'Catat satu hal yang disyukuri', detail: 'Latih hati melihat kebaikan yang hadir hari ini.', category: 'meditation', xpReward: 10 },
+      { id: 'walk_daily', group: 'Fisik & Kesehatan', name: 'Jalan kaki 20 menit', detail: 'Pilih waktu dan intensitas yang nyaman untuk tubuh.', category: 'fitness', xpReward: 25 },
+      { id: 'stretching', group: 'Fisik & Kesehatan', name: 'Peregangan ringan 5 menit', detail: 'Bergerak ringan setelah duduk lama atau sebelum beraktivitas.', category: 'fitness', xpReward: 10 },
+      { id: 'drink_water', group: 'Fisik & Kesehatan', name: 'Minum air secara teratur', detail: 'Sesuaikan kebutuhan minum dengan aktivitas dan kondisi tubuh.', category: 'fitness', xpReward: 10 }
+    ];
+
+    // Level Rank Titles
+    const RANKS = [
+      "Pemula",
+      "Penjaga Niat",
+      "Mulai Konsisten",
+      "Perawat Kebiasaan",
+      "Tumbuh Bersama",
+      "Teladan Istiqamah",
+      "Pribadi Bertumbuh"
+    ];
+
+    // --- AUDIO SYNTHESIZER (Web Audio API) ---
+    function playBeep(type = 'complete') {
+      if (!state.soundEnabled) return;
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'complete') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+          osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5
+          gain.gain.setValueAtTime(0.15, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.15);
+        } else if (type === 'levelup') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, ctx.currentTime);
+          osc.frequency.setValueAtTime(554.37, ctx.currentTime + 0.1);
+          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.2);
+          osc.frequency.setValueAtTime(880, ctx.currentTime + 0.3);
+          gain.gain.setValueAtTime(0.2, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.5);
+        }
+      } catch (e) {
+        console.log('Audio disabled or blocked by browser policy');
+      }
+    }
+
+    // --- INITIALIZATION ---
+    window.onload = function() {
+      loadState();
+      renderAll();
+      initLucide();
+      window.addEventListener('resize', () => {
+        if (!document.getElementById('statsTab').classList.contains('hidden')) renderWeeklyChart();
+      });
+      
+      const today = new Date();
+      const options = { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' };
+      document.getElementById('currentDateDisplay').innerText = today.toLocaleDateString('id-ID', options);
+      window.setTimeout(finishSplash, 1500);
+    };
+
+    function finishSplash() {
+      const splash = document.getElementById('splashScreen');
+      if (!splash || splash.classList.contains('is-leaving')) return;
+      splash.classList.add('is-leaving');
+      splash.setAttribute('aria-hidden', 'true');
+      window.setTimeout(() => splash.remove(), 500);
+    }
+
+    function initLucide() {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function loadState() {
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      const legacyData = savedData ? null : localStorage.getItem(LEGACY_STORAGE_KEY);
+      const data = savedData || legacyData;
+      if (data) {
+        try {
+          const parsed = JSON.parse(data);
+          if (!parsed || typeof parsed !== 'object') throw new Error('Invalid saved data');
+
+          const defaults = state;
+          state = { ...defaults, ...parsed };
+          state.user = { ...defaults.user, ...(parsed.user || {}) };
+          state.habits = Array.isArray(parsed.habits) ? parsed.habits : defaults.habits;
+          state.achievements = defaults.achievements.map(achievement => {
+            const savedAchievement = Array.isArray(parsed.achievements)
+              ? parsed.achievements.find(item => item.id === achievement.id)
+              : null;
+            return { ...achievement, unlocked: Boolean(savedAchievement && savedAchievement.unlocked) };
+          });
+          if (typeof parsed.soundEnabled === 'boolean') state.soundEnabled = parsed.soundEnabled;
+          if (legacyData) saveState();
+        } catch (e) {
+          console.error("Failed to load local state", e);
+        }
+      }
+      if (!data) {
+        state.habits = [
+          { id: '1', name: 'Tilawah Al-Qur’an 10 menit', category: 'worship', xpReward: 25, history: {} },
+          { id: '2', name: 'Membaca buku 15 menit', category: 'reading', xpReward: 25, history: {} }
+        ];
+      }
+    }
+
+    function getDateKey(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function getTodayKey() {
+      return getDateKey(new Date());
+    }
+
+    function isHabitScheduled(habit, date) {
+      return habit.frequency !== 'weekdays' || (date.getDay() !== 0 && date.getDay() !== 6);
+    }
+
+    function getPreviousScheduledDate(habit, date) {
+      const previousDate = new Date(date);
+      do {
+        previousDate.setDate(previousDate.getDate() - 1);
+      } while (!isHabitScheduled(habit, previousDate));
+      return previousDate;
+    }
+
+    function getHabitStreak(habit) {
+      const history = habit.history || {};
+      const date = new Date();
+      if (!isHabitScheduled(habit, date) || history[getDateKey(date)] !== true) {
+        date.setTime(getPreviousScheduledDate(habit, date).getTime());
+      }
+
+      let streak = 0;
+      while (history[getDateKey(date)] === true) {
+        streak++;
+        date.setTime(getPreviousScheduledDate(habit, date).getTime());
+      }
+      return streak;
+    }
+
+    // --- GAMIFICATION SYSTEMS ---
+    function addXP(amount) {
+      const prevLevel = state.user.level;
+      state.user.xp += amount;
+      
+      const xpPerLevel = 200;
+      state.user.level = Math.floor(state.user.xp / xpPerLevel) + 1;
+
+      saveState();
+      renderHeaderStats();
+
+      if (state.user.level > prevLevel) {
+        playBeep('levelup');
+        triggerConfetti();
+        document.getElementById('newLevelText').innerText = `Selamat! Anda mencapai level ${state.user.level}.`;
+        document.getElementById('levelUpOverlay').classList.remove('hidden');
+      }
+
+      checkAchievements();
+    }
+
+    function closeLevelUpModal() {
+      document.getElementById('levelUpOverlay').classList.add('hidden');
+    }
+
+    function triggerConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+      }
+    }
+
+    // --- RENDER FUNCTIONS ---
+    function renderAll() {
+      renderHeaderStats();
+      renderHabitsList();
+      renderStatsTab();
+      renderAchievements();
+      initLucide();
+    }
+
+    function renderHeaderStats() {
+      const level = state.user.level;
+      const totalXp = state.user.xp;
+      const xpPerLevel = 200;
+      const currentLevelXp = totalXp % xpPerLevel;
+      const progressPercent = Math.min(100, Math.floor((currentLevelXp / xpPerLevel) * 100));
+
+      document.getElementById('levelBadge').innerText = `LVL ${level}`;
+      document.getElementById('totalXpText').innerText = `${totalXp} XP`;
+      document.getElementById('xpProgressText').innerText = `${currentLevelXp} / ${xpPerLevel} XP`;
+      document.getElementById('xpProgressBar').style.width = `${progressPercent}%`;
+
+      const rankIndex = Math.min(RANKS.length - 1, level - 1);
+      document.getElementById('rankTitle').innerText = RANKS[rankIndex];
+
+      let maxStreak = 0;
+      state.habits.forEach(h => { maxStreak = Math.max(maxStreak, getHabitStreak(h)); });
+      document.getElementById('maxStreakText').innerText = `${maxStreak} Hari`;
+    }
+
+    function renderHabitsList() {
+      const container = document.getElementById('habitsListContainer');
+      const emptyState = document.getElementById('emptyHabitState');
+      const todayKey = getTodayKey();
+
+      if (!state.habits || state.habits.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      container.innerHTML = state.habits.map(habit => {
+        const isDoneToday = habit.history && habit.history[todayKey] === true;
+        const scheduledToday = isHabitScheduled(habit, new Date());
+        
+        let catInfo = CATEGORY_MAP[habit.category];
+        if (!catInfo) {
+          catInfo = { label: habit.category || 'Custom', icon: 'tag', color: 'text-neonCyan border-neonCyan/40 bg-neonCyan/10' };
+        }
+
+        const xpAmount = habit.xpReward || 25;
+
+        return `
+          <div class="glass-panel p-4 rounded-2xl flex items-center justify-between border-slate-800 hover:border-slate-700 transition">
+            <div class="flex items-center space-x-3.5">
+              <div class="w-11 h-11 rounded-xl border ${catInfo.color} flex items-center justify-center">
+                <i data-lucide="${catInfo.icon}" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold text-sm ${isDoneToday ? 'line-through text-slate-400' : 'text-slate-100'}">${escapeHtml(habit.name)}</h4>
+                <div class="flex items-center space-x-2 mt-1">
+                  <span class="text-[11px] font-mono-tech text-amber-400 flex items-center gap-1">
+                    <i data-lucide="flame" class="w-3 h-3 fill-amber-400"></i> ${getHabitStreak(habit)} Hari
+                  </span>
+                  <span class="text-[10px] text-neonCyan font-mono-tech">• +${xpAmount} XP</span>
+                  <span class="text-[10px] text-slate-500 font-mono-tech">[${escapeHtml(catInfo.label)}]</span>
+                  ${habit.frequency === 'weekdays' ? '<span class="text-[10px] text-slate-500">Hari kerja</span>' : ''}
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <button onclick="toggleHabit('${habit.id}')" ${scheduledToday ? '' : 'disabled title="Kebiasaan ini dijadwalkan untuk hari kerja"'}
+                class="w-10 h-10 rounded-xl flex items-center justify-center transition ${!scheduledToday ? 'opacity-40 cursor-not-allowed bg-slate-800 text-slate-500' : isDoneToday ? 'bg-neonGreen text-slate-950 shadow-glowGreen' : 'bg-slate-800 text-slate-400 hover:border-slate-600 border border-slate-700'}" aria-label="${isDoneToday ? 'Batalkan' : 'Selesaikan'} ${escapeHtml(habit.name)}">
+                <i data-lucide="${isDoneToday ? 'check-circle-2' : 'circle'}" class="w-6 h-6"></i>
+              </button>
+              <button onclick="openHabitModal('${habit.id}')" title="Edit kebiasaan" aria-label="Edit ${escapeHtml(habit.name)}" class="p-2 text-slate-500 hover:text-neonCyan transition">
+                <i data-lucide="pencil" class="w-4 h-4"></i>
+              </button>
+              <button onclick="deleteHabit('${habit.id}')" class="p-2 text-slate-600 hover:text-red-400 transition">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      initLucide();
+    }
+
+    function toggleHabit(id) {
+      const todayKey = getTodayKey();
+      const habit = state.habits.find(h => h.id === id);
+      if (!habit) return;
+
+      if (!habit.history) habit.history = {};
+      const currentlyDone = habit.history[todayKey] === true;
+      const xpReward = habit.xpReward || 25;
+
+      if (!currentlyDone) {
+        habit.history[todayKey] = true;
+        state.user.totalHabitsCompleted = (state.user.totalHabitsCompleted || 0) + 1;
+        playBeep('complete');
+        addXP(xpReward);
+      } else {
+        habit.history[todayKey] = false;
+        state.user.xp = Math.max(0, state.user.xp - xpReward);
+        state.user.level = Math.floor(state.user.xp / 200) + 1;
+        state.user.totalHabitsCompleted = Math.max(0, (state.user.totalHabitsCompleted || 0) - 1);
+      }
+
+      saveState();
+      renderAll();
+    }
+
+    function handleCategorySelectChange(elem) {
+      const customInput = document.getElementById('customCategoryInput');
+      if (elem.value === 'custom') {
+        customInput.classList.remove('hidden');
+        customInput.focus();
+      } else {
+        customInput.classList.add('hidden');
+      }
+    }
+
+    function openHabitModal(habitId = null) {
+      const form = document.getElementById('addHabitForm');
+      const habit = state.habits.find(item => item.id === habitId);
+      const categorySelect = document.getElementById('habitCategorySelect');
+      const customCategoryInput = document.getElementById('customCategoryInput');
+
+      editingHabitId = habit ? habit.id : null;
+      form.reset();
+      customCategoryInput.classList.add('hidden');
+
+      if (habit) {
+        document.getElementById('habitModalTitle').innerHTML = '<i data-lucide="pencil" class="w-5 h-5 text-neonCyan"></i> Edit Kebiasaan';
+        document.getElementById('habitSubmitBtn').innerText = 'Simpan Perubahan';
+        document.getElementById('habitNameInput').value = habit.name;
+        document.getElementById('habitXpReward').value = String(habit.xpReward || 25);
+        document.getElementById('habitFrequency').value = habit.frequency || 'daily';
+
+        if (Object.prototype.hasOwnProperty.call(CATEGORY_MAP, habit.category)) {
+          categorySelect.value = habit.category;
+        } else {
+          categorySelect.value = 'custom';
+          customCategoryInput.value = habit.category || '';
+          customCategoryInput.classList.remove('hidden');
+        }
+      } else {
+        document.getElementById('habitModalTitle').innerHTML = '<i data-lucide="plus-circle" class="w-5 h-5 text-neonCyan"></i> Kebiasaan Baru';
+        document.getElementById('habitSubmitBtn').innerText = 'Simpan Kebiasaan';
+      }
+
+      openModal('addHabitModal');
+      initLucide();
+    }
+
+    function openHabitTemplateModal() {
+      renderHabitTemplateOptions();
+      document.getElementById('habitTemplateFeedback').innerText = '';
+      openModal('habitTemplateModal');
+      initLucide();
+    }
+
+    function renderHabitTemplateOptions() {
+      const existingNames = new Set(state.habits.map(habit => habit.name.trim().toLocaleLowerCase('id')));
+      const groups = [...new Set(HABIT_TEMPLATES.map(template => template.group))];
+      document.getElementById('habitTemplateGroups').innerHTML = groups.map(group => `
+        <section>
+          <h4 class="text-sm font-semibold text-neonGreen mb-2">${escapeHtml(group)}</h4>
+          <div class="space-y-2">
+            ${HABIT_TEMPLATES.filter(template => template.group === group).map(template => {
+              const alreadyAdded = existingNames.has(template.name.toLocaleLowerCase('id'));
+              return `
+                <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 ${alreadyAdded ? 'opacity-50' : 'cursor-pointer hover:border-slate-500'}">
+                  <input class="habit-template-checkbox mt-1 accent-emerald-400" type="checkbox" value="${template.id}" onchange="updateHabitTemplateSelection()" ${alreadyAdded ? 'disabled' : ''}>
+                  <span class="min-w-0 flex-1">
+                    <span class="flex justify-between gap-2 text-xs font-semibold text-slate-100">
+                      <span>${escapeHtml(template.name)}</span>
+                      <span class="shrink-0 text-neonCyan">${template.xpReward} poin</span>
+                    </span>
+                    <span class="block text-[11px] text-slate-400 mt-1">${escapeHtml(template.detail)}</span>
+                    ${alreadyAdded ? '<span class="block text-[10px] text-neonGreen mt-1">Sudah ada di daftar</span>' : ''}
+                  </span>
+                </label>
+              `;
+            }).join('')}
+          </div>
+        </section>
+      `).join('');
+      updateHabitTemplateSelection();
+    }
+
+    function updateHabitTemplateSelection() {
+      const selectedCount = document.querySelectorAll('.habit-template-checkbox:checked').length;
+      document.getElementById('selectedTemplateCount').innerText = selectedCount;
+      document.getElementById('addSelectedTemplatesBtn').disabled = selectedCount === 0;
+    }
+
+    function setHabitTemplateSelection(selected) {
+      document.querySelectorAll('.habit-template-checkbox:not(:disabled)').forEach(input => {
+        input.checked = selected;
+      });
+      updateHabitTemplateSelection();
+    }
+
+    function addSelectedHabitTemplates() {
+      const selectedIds = new Set(Array.from(document.querySelectorAll('.habit-template-checkbox:checked'), input => input.value));
+      const existingNames = new Set(state.habits.map(habit => habit.name.trim().toLocaleLowerCase('id')));
+      const selectedTemplates = HABIT_TEMPLATES.filter(template => selectedIds.has(template.id));
+      const newTemplates = selectedTemplates.filter(template => !existingNames.has(template.name.toLocaleLowerCase('id')));
+
+      newTemplates.forEach((template, index) => {
+        state.habits.push({
+          id: `template_${template.id}_${Date.now()}_${index}`,
+          name: template.name,
+          category: template.category,
+          xpReward: template.xpReward,
+          frequency: 'daily',
+          history: {}
+        });
+      });
+
+      if (newTemplates.length > 0) {
+        saveState();
+        checkAchievements();
+        renderAll();
+        document.getElementById('habitTemplateFeedback').innerText = `${newTemplates.length} kebiasaan ditambahkan. Anda bisa mengubah atau menghapusnya kapan saja.`;
+        renderHabitTemplateOptions();
+      } else {
+        document.getElementById('habitTemplateFeedback').innerText = 'Semua pilihan sudah ada di daftar kebiasaan Anda.';
+      }
+    }
+
+    function handleCreateHabit(e) {
+      e.preventDefault();
+      const name = document.getElementById('habitNameInput').value.trim();
+      const catSelect = document.getElementById('habitCategorySelect').value;
+      const customCat = document.getElementById('customCategoryInput').value.trim();
+      const xpReward = parseInt(document.getElementById('habitXpReward').value) || 25;
+      const frequency = document.getElementById('habitFrequency').value;
+
+      if (!name) return;
+      if (catSelect === 'custom' && !customCat) {
+        document.getElementById('customCategoryInput').focus();
+        return;
+      }
+
+      let categoryKey = catSelect;
+      if (catSelect === 'custom' && customCat) {
+        categoryKey = customCat;
+      }
+
+      if (editingHabitId) {
+        const habit = state.habits.find(item => item.id === editingHabitId);
+        if (habit) Object.assign(habit, { name, category: categoryKey, xpReward, frequency });
+      } else {
+        state.habits.push({
+          id: Date.now().toString(),
+          name,
+          category: categoryKey,
+          xpReward,
+          frequency,
+          history: {}
+        });
+      }
+
+      editingHabitId = null;
+      saveState();
+      renderAll();
+      closeModal('addHabitModal');
+      document.getElementById('addHabitForm').reset();
+      document.getElementById('customCategoryInput').classList.add('hidden');
+      document.getElementById('habitModalTitle').innerHTML = '<i data-lucide="plus-circle" class="w-5 h-5 text-neonCyan"></i> Kebiasaan Baru';
+      document.getElementById('habitSubmitBtn').innerText = 'Simpan Kebiasaan';
+      checkAchievements();
+      renderAll();
+    }
+
+    function deleteHabit(id) {
+      if (confirm('Hapus kebiasaan ini?')) {
+        state.habits = state.habits.filter(h => h.id !== id);
+        saveState();
+        renderAll();
+      }
+    }
+
+    // --- TAB 2: STATS & CANVAS CHART ---
+    function renderStatsTab() {
+      const todayKey = getTodayKey();
+      const totalHabits = state.habits.length;
+      let completedToday = 0;
+      let scheduledToday = 0;
+
+      state.habits.forEach(h => {
+        if (isHabitScheduled(h, new Date())) {
+          scheduledToday++;
+          if (h.history && h.history[todayKey] === true) completedToday++;
+        }
+      });
+
+      const rate = scheduledToday > 0 ? Math.round((completedToday / scheduledToday) * 100) : 0;
+      const unlockedBadges = state.achievements.filter(a => a.unlocked).length;
+
+      document.getElementById('statTotalHabits').innerText = totalHabits;
+      document.getElementById('statCompletedToday').innerText = completedToday;
+      document.getElementById('statCompletionRate').innerText = `${rate}%`;
+      document.getElementById('statBadgesUnlocked').innerText = `${unlockedBadges}/${state.achievements.length}`;
+
+      renderWeeklyChart();
+      renderHeatmap();
+    }
+
+    function renderWeeklyChart() {
+      const canvas = document.getElementById('weeklyChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const days = [];
+      const counts = [];
+      
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const dateKey = getDateKey(d);
+        const dayLabel = d.toLocaleDateString('id-ID', { weekday: 'narrow' });
+
+        let doneCount = 0;
+        state.habits.forEach(h => {
+          if (h.history && h.history[dateKey] === true) doneCount++;
+        });
+
+        days.push(dayLabel);
+        counts.push(doneCount);
+      }
+
+      const barWidth = 24;
+      const gap = (canvas.width - (days.length * barWidth)) / (days.length + 1);
+      const maxVal = Math.max(5, ...counts);
+
+      counts.forEach((val, i) => {
+        const x = gap + i * (barWidth + gap);
+        const barHeight = (val / maxVal) * (canvas.height - 40);
+        const y = canvas.height - barHeight - 25;
+
+        const gradient = ctx.createLinearGradient(0, y, 0, canvas.height - 25);
+        gradient.addColorStop(0, '#00F0FF');
+        gradient.addColorStop(1, '#7000FF');
+
+        ctx.fillStyle = val > 0 ? gradient : 'rgba(255, 255, 255, 0.05)';
+        ctx.beginPath();
+        ctx.roundRect(x, y, barWidth, Math.max(6, barHeight), [4, 4, 0, 0]);
+        ctx.fill();
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '10px Fira Code';
+        ctx.textAlign = 'center';
+        ctx.fillText(days[i], x + barWidth / 2, canvas.height - 8);
+      });
+    }
+
+    function renderHeatmap() {
+      const container = document.getElementById('heatmapGrid');
+      if (!container) return;
+
+      container.innerHTML = '';
+      const totalDays = 30;
+      
+      for (let i = totalDays - 1; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const dateKey = getDateKey(d);
+
+        let count = 0;
+        state.habits.forEach(h => {
+          if (h.history && h.history[dateKey] === true) count++;
+        });
+
+        let bgClass = 'bg-slate-800/40 border-slate-700/30';
+        if (count === 1) bgClass = 'bg-neonGreen/30 border-neonGreen/50';
+        else if (count === 2) bgClass = 'bg-neonGreen/60 border-neonGreen/80';
+        else if (count >= 3) bgClass = 'bg-neonGreen shadow-glowGreen text-slate-950 font-bold';
+
+        const cell = document.createElement('div');
+        cell.className = `w-full aspect-square rounded-md border ${bgClass} transition hover:scale-110`;
+        cell.title = `${dateKey}: ${count} kebiasaan selesai`;
+        container.appendChild(cell);
+      }
+    }
+
+    // --- TAB 3: ACHIEVEMENTS ---
+    function checkAchievements() {
+      let newlyUnlocked = false;
+
+      state.achievements.forEach(ach => {
+        if (ach.unlocked) return;
+
+        if (ach.id === 'first_step' && state.user.totalHabitsCompleted >= 1) {
+          ach.unlocked = true;
+          newlyUnlocked = true;
+        } else if (ach.id === 'level_5' && state.user.level >= 5) {
+          ach.unlocked = true;
+          newlyUnlocked = true;
+        } else if (ach.id === 'habits_5' && state.habits.length >= 5) {
+          ach.unlocked = true;
+          newlyUnlocked = true;
+        } else if (ach.id === 'master_50' && state.user.totalHabitsCompleted >= 50) {
+          ach.unlocked = true;
+          newlyUnlocked = true;
+        }
+
+        const hasStreak3 = state.habits.some(h => getHabitStreak(h) >= 3);
+        const hasStreak7 = state.habits.some(h => getHabitStreak(h) >= 7);
+        if (ach.id === 'streak_3' && hasStreak3) { ach.unlocked = true; newlyUnlocked = true; }
+        if (ach.id === 'streak_7' && hasStreak7) { ach.unlocked = true; newlyUnlocked = true; }
+
+        if (ach.unlocked && newlyUnlocked) {
+          state.user.xp += ach.exp;
+        }
+      });
+
+      if (newlyUnlocked) {
+        state.user.level = Math.floor(state.user.xp / 200) + 1;
+        saveState();
+        renderHeaderStats();
+        renderAchievements();
+      }
+    }
+
+    function renderAchievements() {
+      const container = document.getElementById('achievementsGrid');
+      if (!container) return;
+
+      container.innerHTML = state.achievements.map(ach => `
+        <div class="glass-panel p-4 rounded-2xl flex items-center space-x-3.5 border ${ach.unlocked ? 'border-neonGreen/40 bg-neonGreen/5' : 'border-slate-800 opacity-60'}">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center ${ach.unlocked ? 'bg-neonGreen text-slate-950 shadow-glowGreen font-bold' : 'bg-slate-800 text-slate-500'}">
+            <i data-lucide="${ach.icon}" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm text-slate-100 font-mono-tech flex items-center gap-1.5">
+              ${escapeHtml(ach.title)}
+              ${ach.unlocked ? '<span class="text-[9px] bg-neonGreen/20 text-neonGreen px-1.5 py-0.2 rounded">UNLOCKED</span>' : ''}
+            </h4>
+            <p class="text-xs text-slate-400 mt-0.5">${escapeHtml(ach.desc)}</p>
+            <span class="text-[10px] text-neonCyan font-mono-tech mt-1 inline-block">+${ach.exp} EXP</span>
+          </div>
+        </div>
+      `).join('');
+
+      initLucide();
+    }
+
+    // --- UI NAVIGATION & MODALS ---
+    function switchTab(tabId) {
+      document.getElementById('habitsTab').classList.add('hidden');
+      document.getElementById('statsTab').classList.add('hidden');
+      document.getElementById('achievementsTab').classList.add('hidden');
+
+      document.getElementById('btnHabitsTab').className = "flex-1 py-2.5 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2 text-slate-400 hover:text-slate-200";
+      document.getElementById('btnStatsTab').className = "flex-1 py-2.5 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2 text-slate-400 hover:text-slate-200";
+      document.getElementById('btnAchievementsTab').className = "flex-1 py-2.5 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2 text-slate-400 hover:text-slate-200";
+
+      document.getElementById(tabId).classList.remove('hidden');
+
+      if (tabId === 'habitsTab') {
+        document.getElementById('btnHabitsTab').className = "flex-1 py-2.5 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2 bg-slate-800 text-neonCyan shadow";
+      } else if (tabId === 'statsTab') {
+        document.getElementById('btnStatsTab').className = "flex-1 py-2.5 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2 bg-slate-800 text-neonCyan shadow";
+        renderStatsTab();
+      } else if (tabId === 'achievementsTab') {
+        document.getElementById('btnAchievementsTab').className = "flex-1 py-2.5 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2 bg-slate-800 text-neonCyan shadow";
+      }
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function toggleSound() {
+      state.soundEnabled = !state.soundEnabled;
+      const icon = document.getElementById('soundIcon');
+      if (state.soundEnabled) {
+        icon.setAttribute('data-lucide', 'volume-2');
+      } else {
+        icon.setAttribute('data-lucide', 'volume-x');
+      }
+      initLucide();
+      saveState();
+    }
+
+    function exportData() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `muslim-grow-up_backup_${getTodayKey()}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importData(event) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (imported && imported.habits) {
+            state = imported;
+            saveState();
+            renderAll();
+            closeModal('settingsModal');
+            alert('Data berhasil diimpor!');
+          }
+        } catch (err) {
+          alert('Format file JSON tidak valid.');
+        }
+      };
+      if (event.target.files[0]) {
+        reader.readAsText(event.target.files[0]);
+      }
+    }
+
+    function resetAllData() {
+      if (confirm('Hapus semua progres dan kebiasaan? Tindakan ini tidak dapat dibatalkan.')) {
+        state.user = { xp: 0, level: 1, totalHabitsCompleted: 0 };
+        state.habits = [];
+        state.achievements.forEach(achievement => { achievement.unlocked = false; });
+        saveState();
+        location.reload();
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
