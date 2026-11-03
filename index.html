@@ -474,8 +474,8 @@
     <section class="glass-panel p-5 sm:p-6 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-slate-700 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="habitTemplateTitle">
       <div class="flex justify-between items-start gap-4 mb-2">
         <div>
-          <h3 id="habitTemplateTitle" class="text-base font-bold text-slate-100">Template Kebiasaan Harian</h3>
-          <p class="text-xs text-slate-400 mt-1">Pilih yang sesuai dengan kondisi dan ritme Anda. Mulai dari sedikit dulu.</p>
+          <h3 id="habitTemplateTitle" class="text-base font-bold text-slate-100">Agenda Harian Muslim</h3>
+          <p class="text-xs text-slate-400 mt-1">Contoh agenda 28 kegiatan dari bangun hingga tidur. Mulai dengan 5-8 pilihan; pilih semua jika ingin menambahkan seluruh agenda. Sesuaikan sholat dengan adzan setempat, kesehatan, dan tanggung jawab Anda.</p>
         </div>
         <button onclick="closeModal('habitTemplateModal')" title="Tutup" aria-label="Tutup template" class="p-1 text-slate-400 hover:text-white">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -651,16 +651,34 @@
     };
 
     const HABIT_TEMPLATES = [
-      { id: 'read_pages', group: 'Kecerdasan Otak', name: 'Membaca buku 10 halaman', detail: 'Luangkan sekitar 15 menit untuk membaca.', category: 'reading', xpReward: 10 },
-      { id: 'learn_daily', group: 'Kecerdasan Otak', name: 'Belajar hal baru 20 menit', detail: 'Pilih satu topik dan belajar tanpa distraksi.', category: 'reading', xpReward: 25 },
-      { id: 'write_reflection', group: 'Kecerdasan Otak', name: 'Tulis satu hal yang dipelajari', detail: 'Ringkas pelajaran hari ini dengan kata-kata sendiri.', category: 'reading', xpReward: 10 },
-      { id: 'prayer_on_time', group: 'Ruhani & Hati', name: 'Menjaga sholat fardu tepat waktu', detail: 'Bangun rutinitas sholat sesuai kemampuan dan keadaan.', category: 'worship', xpReward: 25 },
-      { id: 'quran_reading', group: 'Ruhani & Hati', name: 'Tilawah Al-Qur’an 10 menit', detail: 'Baca dengan tenang; sesuaikan target dengan kemampuan.', category: 'worship', xpReward: 25 },
-      { id: 'daily_dhikr', group: 'Ruhani & Hati', name: 'Dzikir atau doa dengan tenang', detail: 'Sediakan beberapa menit untuk mengingat Allah.', category: 'worship', xpReward: 10 },
-      { id: 'gratitude', group: 'Ruhani & Hati', name: 'Catat satu hal yang disyukuri', detail: 'Latih hati melihat kebaikan yang hadir hari ini.', category: 'meditation', xpReward: 10 },
-      { id: 'walk_daily', group: 'Fisik & Kesehatan', name: 'Jalan kaki 20 menit', detail: 'Pilih waktu dan intensitas yang nyaman untuk tubuh.', category: 'fitness', xpReward: 25 },
-      { id: 'stretching', group: 'Fisik & Kesehatan', name: 'Peregangan ringan 5 menit', detail: 'Bergerak ringan setelah duduk lama atau sebelum beraktivitas.', category: 'fitness', xpReward: 10 },
-      { id: 'drink_water', group: 'Fisik & Kesehatan', name: 'Minum air secara teratur', detail: 'Sesuaikan kebutuhan minum dengan aktivitas dan kondisi tubuh.', category: 'fitness', xpReward: 10 }
+      { id: 'wake_dua', group: 'Bangun Tidur & Subuh', name: 'Bangun dan membaca doa', detail: 'Mulai hari dengan tenang dan niat yang baik.', category: 'worship', xpReward: 10 },
+      { id: 'make_bed', group: 'Bangun Tidur & Subuh', name: 'Rapikan tempat tidur', detail: 'Awali hari dengan merapikan ruang istirahat.', category: 'productivity', xpReward: 10 },
+      { id: 'fajr_prayer', group: 'Bangun Tidur & Subuh', name: 'Sholat Subuh sesuai waktu setempat', detail: 'Gunakan jadwal adzan di lokasi Anda.', category: 'worship', xpReward: 25 },
+      { id: 'morning_dhikr', group: 'Bangun Tidur & Subuh', name: 'Dzikir pagi atau tilawah singkat', detail: 'Mulai dari beberapa menit dan tingkatkan secara bertahap.', category: 'worship', xpReward: 10 },
+      { id: 'morning_water', group: 'Bangun Tidur & Subuh', name: 'Minum air setelah bangun', detail: 'Penuhi kebutuhan cairan sesuai kondisi tubuh.', category: 'fitness', xpReward: 10 },
+      { id: 'morning_movement', group: 'Pagi: Menyiapkan Diri', name: 'Peregangan atau gerak ringan', detail: 'Luangkan 5–10 menit dengan gerakan yang nyaman.', category: 'fitness', xpReward: 10 },
+      { id: 'healthy_breakfast', group: 'Pagi: Menyiapkan Diri', name: 'Sarapan bergizi jika sesuai rutinitas', detail: 'Pilih makanan yang mendukung energi dan kebutuhan kesehatan.', category: 'fitness', xpReward: 10 },
+      { id: 'daily_priorities', group: 'Pagi: Menyiapkan Diri', name: 'Tentukan tiga prioritas hari ini', detail: 'Pilih target yang realistis untuk kerja, belajar, dan keluarga.', category: 'productivity', xpReward: 10 },
+      { id: 'focused_learning', group: 'Pagi: Fokus Belajar atau Kerja', name: 'Belajar fokus selama 25 menit', detail: 'Pilih satu topik; jauhkan distraksi selama satu sesi.', category: 'reading', xpReward: 25 },
+      { id: 'read_pages', group: 'Pagi: Fokus Belajar atau Kerja', name: 'Membaca buku 10 halaman', detail: 'Baca buku yang menambah ilmu atau keterampilan.', category: 'reading', xpReward: 10 },
+      { id: 'deep_work', group: 'Pagi: Fokus Belajar atau Kerja', name: 'Selesaikan satu tugas terpenting', detail: 'Kerjakan dengan jujur, tekun, dan jeda yang cukup.', category: 'productivity', xpReward: 25 },
+      { id: 'eye_break', group: 'Pagi: Fokus Belajar atau Kerja', name: 'Istirahatkan mata dan ubah posisi duduk', detail: 'Ambil jeda singkat secara berkala saat belajar atau bekerja.', category: 'fitness', xpReward: 10 },
+      { id: 'dhuhr_prayer', group: 'Siang: Zuhur & Istirahat', name: 'Sholat Zuhur sesuai waktu setempat', detail: 'Sesuaikan dengan jadwal adzan dan tanggung jawab harian.', category: 'worship', xpReward: 25 },
+      { id: 'mindful_lunch', group: 'Siang: Zuhur & Istirahat', name: 'Makan siang dengan tenang', detail: 'Berhenti sejenak dari layar dan nikmati makanan secukupnya.', category: 'fitness', xpReward: 10 },
+      { id: 'short_walk', group: 'Siang: Zuhur & Istirahat', name: 'Berjalan ringan setelah duduk lama', detail: 'Gerakkan tubuh beberapa menit sesuai kemampuan.', category: 'fitness', xpReward: 10 },
+      { id: 'review_progress', group: 'Siang: Zuhur & Istirahat', name: 'Tinjau progres dan atur ulang prioritas', detail: 'Sesuaikan rencana jika kondisi hari ini berubah.', category: 'productivity', xpReward: 10 },
+      { id: 'asr_prayer', group: 'Sore: Asar & Aktivitas', name: 'Sholat Asar sesuai waktu setempat', detail: 'Gunakan jadwal adzan di lokasi Anda.', category: 'worship', xpReward: 25 },
+      { id: 'afternoon_exercise', group: 'Sore: Asar & Aktivitas', name: 'Jalan kaki atau olahraga ringan', detail: 'Target 15–30 menit; pilih intensitas yang aman bagi tubuh.', category: 'fitness', xpReward: 25 },
+      { id: 'help_at_home', group: 'Sore: Asar & Aktivitas', name: 'Bantu satu pekerjaan rumah', detail: 'Ambil bagian dalam tanggung jawab bersama.', category: 'other', xpReward: 10 },
+      { id: 'kindness', group: 'Sore: Asar & Aktivitas', name: 'Lakukan satu kebaikan untuk orang lain', detail: 'Sapa, dengarkan, bantu, atau hubungi orang yang membutuhkan.', category: 'meditation', xpReward: 10 },
+      { id: 'maghrib_prayer', group: 'Maghrib & Malam', name: 'Sholat Maghrib sesuai waktu setempat', detail: 'Gunakan jadwal adzan di lokasi Anda.', category: 'worship', xpReward: 25 },
+      { id: 'quran_reflection', group: 'Maghrib & Malam', name: 'Tilawah dan renungkan satu pelajaran', detail: 'Baca beberapa ayat dan catat hal yang ingin diamalkan.', category: 'worship', xpReward: 25 },
+      { id: 'family_time', group: 'Maghrib & Malam', name: 'Luangkan waktu berkualitas bersama keluarga', detail: 'Dengarkan dan berbincang tanpa terburu-buru.', category: 'other', xpReward: 10 },
+      { id: 'isha_prayer', group: 'Maghrib & Malam', name: 'Sholat Isya sesuai waktu setempat', detail: 'Gunakan jadwal adzan di lokasi Anda.', category: 'worship', xpReward: 25 },
+      { id: 'gratitude_review', group: 'Menjelang Tidur', name: 'Muhasabah dan catat hal yang disyukuri', detail: 'Tinjau hari dengan jujur tanpa menghakimi diri berlebihan.', category: 'meditation', xpReward: 10 },
+      { id: 'tomorrow_plan', group: 'Menjelang Tidur', name: 'Siapkan satu prioritas untuk besok', detail: 'Siapkan kebutuhan esok agar pagi lebih tenang.', category: 'productivity', xpReward: 10 },
+      { id: 'screen_break', group: 'Menjelang Tidur', name: 'Kurangi layar sebelum tidur', detail: 'Coba jeda dari gawai 30 menit sebelum beristirahat.', category: 'fitness', xpReward: 10 },
+      { id: 'sleep_routine', group: 'Menjelang Tidur', name: 'Tidur cukup dan teratur', detail: 'Jaga waktu istirahat; sesuaikan durasi dengan kebutuhan pribadi.', category: 'fitness', xpReward: 25 }
     ];
 
     // Level Rank Titles
@@ -896,17 +914,18 @@
         const xpAmount = habit.xpReward || 25;
 
         return `
-          <div class="glass-panel p-4 rounded-2xl flex items-center justify-between border-slate-800 hover:border-slate-700 transition">
-            <div class="flex items-center space-x-3.5">
+          <div class="glass-panel p-4 rounded-2xl flex items-center justify-between gap-3 border-slate-800 hover:border-slate-700 transition">
+            <div class="flex min-w-0 flex-1 items-center space-x-3.5">
               <div class="w-11 h-11 rounded-xl border ${catInfo.color} flex items-center justify-center">
                 <i data-lucide="${catInfo.icon}" class="w-5 h-5"></i>
               </div>
-              <div>
-                <h4 class="font-semibold text-sm ${isDoneToday ? 'line-through text-slate-400' : 'text-slate-100'}">${escapeHtml(habit.name)}</h4>
-                <div class="flex items-center space-x-2 mt-1">
+              <div class="min-w-0">
+                <h4 class="break-words font-semibold text-sm ${isDoneToday ? 'line-through text-slate-400' : 'text-slate-100'}">${escapeHtml(habit.name)}</h4>
+                <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1">
                   <span class="text-[11px] font-mono-tech text-amber-400 flex items-center gap-1">
                     <i data-lucide="flame" class="w-3 h-3 fill-amber-400"></i> ${getHabitStreak(habit)} Hari
                   </span>
+                  ${habit.timeBlock ? `<span class="text-[10px] text-neonGreen">${escapeHtml(habit.timeBlock)}</span>` : ''}
                   <span class="text-[10px] text-neonCyan font-mono-tech">• +${xpAmount} XP</span>
                   <span class="text-[10px] text-slate-500 font-mono-tech">[${escapeHtml(catInfo.label)}]</span>
                   ${habit.frequency === 'weekdays' ? '<span class="text-[10px] text-slate-500">Hari kerja</span>' : ''}
@@ -914,7 +933,7 @@
               </div>
             </div>
 
-            <div class="flex items-center space-x-2">
+            <div class="flex shrink-0 items-center space-x-2">
               <button onclick="toggleHabit('${habit.id}')" ${scheduledToday ? '' : 'disabled title="Kebiasaan ini dijadwalkan untuk hari kerja"'}
                 class="w-10 h-10 rounded-xl flex items-center justify-center transition ${!scheduledToday ? 'opacity-40 cursor-not-allowed bg-slate-800 text-slate-500' : isDoneToday ? 'bg-neonGreen text-slate-950 shadow-glowGreen' : 'bg-slate-800 text-slate-400 hover:border-slate-600 border border-slate-700'}" aria-label="${isDoneToday ? 'Batalkan' : 'Selesaikan'} ${escapeHtml(habit.name)}">
                 <i data-lucide="${isDoneToday ? 'check-circle-2' : 'circle'}" class="w-6 h-6"></i>
@@ -1063,6 +1082,8 @@
           category: template.category,
           xpReward: template.xpReward,
           frequency: 'daily',
+          timeBlock: template.group,
+          detail: template.detail,
           history: {}
         });
       });

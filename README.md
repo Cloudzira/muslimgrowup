@@ -5,7 +5,7 @@ Muslim Grow Up is a lightweight habit tracker for building spiritual, learning, 
 ## Features
 
 - Create, edit, and remove habits with categories, daily or weekday schedules, and configurable point values.
-- Choose from 10 built-in daily habit templates for learning, worship and reflection, and physical health.
+- Choose from a full-day agenda template, from waking up through bedtime, spanning worship, learning, health, work, reflection, and family life.
 - Record daily check-ins and track consecutive scheduled days.
 - Review a 7-day activity chart, a 30-day heatmap, levels, and achievement badges.
 - Export and import a JSON backup from Settings.
