@@ -312,6 +312,9 @@
         <button onclick="toggleSound()" id="soundBtn" title="Toggle Sound FX" class="p-2.5 rounded-xl glass-card hover:border-neonCyan transition text-slate-300">
           <i data-lucide="volume-2" id="soundIcon" class="w-5 h-5"></i>
         </button>
+        <button onclick="openFocusTools()" title="Stopwatch dan timer" aria-label="Buka stopwatch dan timer" class="p-2.5 rounded-xl glass-card hover:border-neonGreen transition text-slate-300">
+          <i data-lucide="timer" class="w-5 h-5"></i>
+        </button>
         <button onclick="openModal('settingsModal')" title="Settings" class="p-2.5 rounded-xl glass-card hover:border-neonCyan transition text-slate-300">
           <i data-lucide="settings" class="w-5 h-5"></i>
         </button>
@@ -381,6 +384,9 @@
         <div class="flex items-center gap-2">
           <i data-lucide="calendar" class="w-5 h-5 text-neonCyan"></i>
           <span id="currentDateDisplay" class="text-sm font-semibold font-mono-tech text-slate-200">Hari Ini</span>
+          <span class="text-slate-600" aria-hidden="true">|</span>
+          <i data-lucide="clock-3" class="w-4 h-4 text-neonGreen" aria-hidden="true"></i>
+          <time id="currentTimeDisplay" class="text-sm font-semibold font-mono-tech text-neonGreen">--:--:--</time>
         </div>
         <div class="grid grid-cols-2 gap-2">
           <button onclick="openHabitTemplateModal()" class="bg-slate-800 text-slate-200 border border-slate-700 font-semibold text-xs px-3 py-2 rounded-lg flex items-center justify-center gap-1.5 hover:border-neonGreen transition">
@@ -496,6 +502,72 @@
     </section>
   </div>
 
+  <!-- MODAL: STOPWATCH & TIMER -->
+  <div id="focusToolsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <section class="glass-panel p-5 sm:p-6 rounded-2xl w-full max-w-md border border-slate-700 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="focusToolsTitle">
+      <div class="flex justify-between items-start gap-4 mb-5">
+        <div>
+          <h2 id="focusToolsTitle" class="text-base font-bold text-slate-100 flex items-center gap-2">
+            <i data-lucide="timer" class="w-5 h-5 text-neonGreen"></i> Alat Fokus
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Atur waktu untuk belajar, bekerja, atau beristirahat.</p>
+        </div>
+        <button onclick="closeModal('focusToolsModal')" title="Tutup" aria-label="Tutup alat fokus" class="p-1 text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-1 p-1 rounded-xl bg-slate-900/80 border border-slate-800" role="tablist" aria-label="Pilih alat waktu">
+        <button id="stopwatchModeButton" role="tab" aria-selected="true" aria-controls="stopwatchPanel" onclick="switchFocusMode('stopwatch')" class="py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-2 bg-slate-800 text-neonGreen shadow">
+          <i data-lucide="timer" class="w-4 h-4"></i> Stopwatch
+        </button>
+        <button id="timerModeButton" role="tab" aria-selected="false" aria-controls="timerPanel" onclick="switchFocusMode('timer')" class="py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-2 text-slate-400 hover:text-slate-200">
+          <i data-lucide="hourglass" class="w-4 h-4"></i> Timer
+        </button>
+      </div>
+
+      <section id="stopwatchPanel" role="tabpanel" aria-labelledby="stopwatchModeButton" class="pt-6 text-center">
+        <p class="text-[10px] text-slate-500 font-mono-tech tracking-[0.18em]">STOPWATCH</p>
+        <time id="stopwatchDisplay" class="block mt-2 text-4xl sm:text-5xl font-mono-tech font-semibold text-slate-100 tabular-nums" aria-live="off">00:00:00.00</time>
+        <p id="stopwatchStatus" class="min-h-5 mt-2 text-xs text-slate-400" aria-live="polite">Siap menghitung waktu.</p>
+        <div class="grid grid-cols-3 gap-2 mt-5">
+          <button id="stopwatchToggleButton" onclick="toggleStopwatch()" class="py-3 rounded-xl bg-neonGreen text-slate-950 font-semibold text-sm flex items-center justify-center gap-2">
+            <i data-lucide="play" class="w-4 h-4"></i> Mulai
+          </button>
+          <button onclick="recordStopwatchLap()" class="py-3 rounded-xl bg-slate-800 text-slate-200 border border-slate-700 font-medium text-sm flex items-center justify-center gap-2">
+            <i data-lucide="flag" class="w-4 h-4"></i> Putaran
+          </button>
+          <button onclick="resetStopwatch()" class="py-3 rounded-xl bg-slate-800 text-slate-200 border border-slate-700 font-medium text-sm flex items-center justify-center gap-2">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset
+          </button>
+        </div>
+        <ol id="stopwatchLaps" class="mt-4 max-h-40 overflow-y-auto divide-y divide-slate-800 text-left"></ol>
+      </section>
+
+      <section id="timerPanel" role="tabpanel" aria-labelledby="timerModeButton" class="hidden pt-6 text-center">
+        <p class="text-[10px] text-slate-500 font-mono-tech tracking-[0.18em]">HITUNG MUNDUR</p>
+        <time id="timerDisplay" class="block mt-2 text-5xl font-mono-tech font-semibold text-slate-100 tabular-nums" aria-live="off">00:25:00</time>
+        <p id="timerStatus" class="min-h-5 mt-2 text-xs text-slate-400" aria-live="polite">Atur durasi lalu tekan Mulai.</p>
+        <div class="grid grid-cols-2 gap-3 mt-5 text-left">
+          <label class="text-xs text-slate-300">Menit
+            <input id="timerMinutesInput" type="number" min="0" max="1440" step="1" value="25" oninput="handleTimerInput()" class="block w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-neonCyan">
+          </label>
+          <label class="text-xs text-slate-300">Detik
+            <input id="timerSecondsInput" type="number" min="0" max="59" step="1" value="0" oninput="handleTimerInput()" class="block w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-neonCyan">
+          </label>
+        </div>
+        <div class="grid grid-cols-2 gap-2 mt-4">
+          <button id="timerToggleButton" onclick="toggleTimer()" class="py-3 rounded-xl bg-neonGreen text-slate-950 font-semibold text-sm flex items-center justify-center gap-2">
+            <i data-lucide="play" class="w-4 h-4"></i> Mulai
+          </button>
+          <button onclick="resetTimer()" class="py-3 rounded-xl bg-slate-800 text-slate-200 border border-slate-700 font-medium text-sm flex items-center justify-center gap-2">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset
+          </button>
+        </div>
+      </section>
+    </section>
+  </div>
+
   <!-- MODAL: ADD HABIT -->
   <div id="addHabitModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="glass-panel p-6 rounded-2xl w-full max-w-md border border-slate-700 shadow-2xl relative">
@@ -550,6 +622,16 @@
               <option value="50">50 XP (Sulit)</option>
             </select>
           </div>
+        </div>
+
+        <div>
+          <label for="habitDurationMinutes" class="block text-xs font-mono-tech text-slate-300 mb-1">DURASI TARGET</label>
+          <div class="flex items-center gap-2">
+            <input id="habitDurationMinutes" type="number" min="1" max="1440" step="1" value="15" required
+              class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-neonCyan">
+            <span class="text-xs text-slate-400 shrink-0">menit</span>
+          </div>
+          <p class="text-[10px] text-slate-500 mt-1">Perkiraan waktu untuk satu kali aktivitas.</p>
         </div>
 
         <div class="pt-2 flex justify-end space-x-2">
@@ -639,6 +721,14 @@
       ]
     };
     let editingHabitId = null;
+    let focusMode = 'stopwatch';
+    let stopwatchElapsedMs = 0;
+    let stopwatchStartedAt = 0;
+    let stopwatchIntervalId = null;
+    let stopwatchLaps = [];
+    let timerRemainingMs = null;
+    let timerDeadline = 0;
+    let timerIntervalId = null;
 
     // Category Styling Map
     const CATEGORY_MAP = {
@@ -651,34 +741,34 @@
     };
 
     const HABIT_TEMPLATES = [
-      { id: 'wake_dua', group: 'Bangun Tidur & Subuh', name: 'Bangun dan membaca doa', detail: 'Mulai hari dengan tenang dan niat yang baik.', category: 'worship', xpReward: 10 },
-      { id: 'make_bed', group: 'Bangun Tidur & Subuh', name: 'Rapikan tempat tidur', detail: 'Awali hari dengan merapikan ruang istirahat.', category: 'productivity', xpReward: 10 },
-      { id: 'fajr_prayer', group: 'Bangun Tidur & Subuh', name: 'Sholat Subuh sesuai waktu setempat', detail: 'Gunakan jadwal adzan di lokasi Anda.', category: 'worship', xpReward: 25 },
-      { id: 'morning_dhikr', group: 'Bangun Tidur & Subuh', name: 'Dzikir pagi atau tilawah singkat', detail: 'Mulai dari beberapa menit dan tingkatkan secara bertahap.', category: 'worship', xpReward: 10 },
-      { id: 'morning_water', group: 'Bangun Tidur & Subuh', name: 'Minum air setelah bangun', detail: 'Penuhi kebutuhan cairan sesuai kondisi tubuh.', category: 'fitness', xpReward: 10 },
-      { id: 'morning_movement', group: 'Pagi: Menyiapkan Diri', name: 'Peregangan atau gerak ringan', detail: 'Luangkan 5–10 menit dengan gerakan yang nyaman.', category: 'fitness', xpReward: 10 },
-      { id: 'healthy_breakfast', group: 'Pagi: Menyiapkan Diri', name: 'Sarapan bergizi jika sesuai rutinitas', detail: 'Pilih makanan yang mendukung energi dan kebutuhan kesehatan.', category: 'fitness', xpReward: 10 },
-      { id: 'daily_priorities', group: 'Pagi: Menyiapkan Diri', name: 'Tentukan tiga prioritas hari ini', detail: 'Pilih target yang realistis untuk kerja, belajar, dan keluarga.', category: 'productivity', xpReward: 10 },
-      { id: 'focused_learning', group: 'Pagi: Fokus Belajar atau Kerja', name: 'Belajar fokus selama 25 menit', detail: 'Pilih satu topik; jauhkan distraksi selama satu sesi.', category: 'reading', xpReward: 25 },
-      { id: 'read_pages', group: 'Pagi: Fokus Belajar atau Kerja', name: 'Membaca buku 10 halaman', detail: 'Baca buku yang menambah ilmu atau keterampilan.', category: 'reading', xpReward: 10 },
-      { id: 'deep_work', group: 'Pagi: Fokus Belajar atau Kerja', name: 'Selesaikan satu tugas terpenting', detail: 'Kerjakan dengan jujur, tekun, dan jeda yang cukup.', category: 'productivity', xpReward: 25 },
-      { id: 'eye_break', group: 'Pagi: Fokus Belajar atau Kerja', name: 'Istirahatkan mata dan ubah posisi duduk', detail: 'Ambil jeda singkat secara berkala saat belajar atau bekerja.', category: 'fitness', xpReward: 10 },
-      { id: 'dhuhr_prayer', group: 'Siang: Zuhur & Istirahat', name: 'Sholat Zuhur sesuai waktu setempat', detail: 'Sesuaikan dengan jadwal adzan dan tanggung jawab harian.', category: 'worship', xpReward: 25 },
-      { id: 'mindful_lunch', group: 'Siang: Zuhur & Istirahat', name: 'Makan siang dengan tenang', detail: 'Berhenti sejenak dari layar dan nikmati makanan secukupnya.', category: 'fitness', xpReward: 10 },
-      { id: 'short_walk', group: 'Siang: Zuhur & Istirahat', name: 'Berjalan ringan setelah duduk lama', detail: 'Gerakkan tubuh beberapa menit sesuai kemampuan.', category: 'fitness', xpReward: 10 },
-      { id: 'review_progress', group: 'Siang: Zuhur & Istirahat', name: 'Tinjau progres dan atur ulang prioritas', detail: 'Sesuaikan rencana jika kondisi hari ini berubah.', category: 'productivity', xpReward: 10 },
-      { id: 'asr_prayer', group: 'Sore: Asar & Aktivitas', name: 'Sholat Asar sesuai waktu setempat', detail: 'Gunakan jadwal adzan di lokasi Anda.', category: 'worship', xpReward: 25 },
-      { id: 'afternoon_exercise', group: 'Sore: Asar & Aktivitas', name: 'Jalan kaki atau olahraga ringan', detail: 'Target 15–30 menit; pilih intensitas yang aman bagi tubuh.', category: 'fitness', xpReward: 25 },
-      { id: 'help_at_home', group: 'Sore: Asar & Aktivitas', name: 'Bantu satu pekerjaan rumah', detail: 'Ambil bagian dalam tanggung jawab bersama.', category: 'other', xpReward: 10 },
-      { id: 'kindness', group: 'Sore: Asar & Aktivitas', name: 'Lakukan satu kebaikan untuk orang lain', detail: 'Sapa, dengarkan, bantu, atau hubungi orang yang membutuhkan.', category: 'meditation', xpReward: 10 },
-      { id: 'maghrib_prayer', group: 'Maghrib & Malam', name: 'Sholat Maghrib sesuai waktu setempat', detail: 'Gunakan jadwal adzan di lokasi Anda.', category: 'worship', xpReward: 25 },
-      { id: 'quran_reflection', group: 'Maghrib & Malam', name: 'Tilawah dan renungkan satu pelajaran', detail: 'Baca beberapa ayat dan catat hal yang ingin diamalkan.', category: 'worship', xpReward: 25 },
-      { id: 'family_time', group: 'Maghrib & Malam', name: 'Luangkan waktu berkualitas bersama keluarga', detail: 'Dengarkan dan berbincang tanpa terburu-buru.', category: 'other', xpReward: 10 },
-      { id: 'isha_prayer', group: 'Maghrib & Malam', name: 'Sholat Isya sesuai waktu setempat', detail: 'Gunakan jadwal adzan di lokasi Anda.', category: 'worship', xpReward: 25 },
-      { id: 'gratitude_review', group: 'Menjelang Tidur', name: 'Muhasabah dan catat hal yang disyukuri', detail: 'Tinjau hari dengan jujur tanpa menghakimi diri berlebihan.', category: 'meditation', xpReward: 10 },
-      { id: 'tomorrow_plan', group: 'Menjelang Tidur', name: 'Siapkan satu prioritas untuk besok', detail: 'Siapkan kebutuhan esok agar pagi lebih tenang.', category: 'productivity', xpReward: 10 },
-      { id: 'screen_break', group: 'Menjelang Tidur', name: 'Kurangi layar sebelum tidur', detail: 'Coba jeda dari gawai 30 menit sebelum beristirahat.', category: 'fitness', xpReward: 10 },
-      { id: 'sleep_routine', group: 'Menjelang Tidur', name: 'Tidur cukup dan teratur', detail: 'Jaga waktu istirahat; sesuaikan durasi dengan kebutuhan pribadi.', category: 'fitness', xpReward: 25 }
+      { id: 'wake_dua', group: 'Bangun Tidur & Subuh', name: 'Bangun dan membaca doa', detail: 'Mulai hari dengan tenang dan niat yang baik.', category: 'worship', xpReward: 10, durationMinutes: 2 },
+      { id: 'make_bed', group: 'Bangun Tidur & Subuh', name: 'Rapikan tempat tidur', detail: 'Awali hari dengan merapikan ruang istirahat.', category: 'productivity', xpReward: 10, durationMinutes: 3 },
+      { id: 'fajr_prayer', group: 'Bangun Tidur & Subuh', name: 'Sholat Subuh sesuai waktu setempat', detail: 'Gunakan jadwal adzan di lokasi Anda.', category: 'worship', xpReward: 25, durationMinutes: 10 },
+      { id: 'morning_dhikr', group: 'Bangun Tidur & Subuh', name: 'Dzikir pagi atau tilawah singkat', detail: 'Mulai dari beberapa menit dan tingkatkan secara bertahap.', category: 'worship', xpReward: 10, durationMinutes: 10 },
+      { id: 'morning_water', group: 'Bangun Tidur & Subuh', name: 'Minum air setelah bangun', detail: 'Penuhi kebutuhan cairan sesuai kondisi tubuh.', category: 'fitness', xpReward: 10, durationMinutes: 2 },
+      { id: 'morning_movement', group: 'Pagi: Menyiapkan Diri', name: 'Peregangan atau gerak ringan', detail: 'Luangkan 5–10 menit dengan gerakan yang nyaman.', category: 'fitness', xpReward: 10, durationMinutes: 10 },
+      { id: 'healthy_breakfast', group: 'Pagi: Menyiapkan Diri', name: 'Sarapan bergizi jika sesuai rutinitas', detail: 'Pilih makanan yang mendukung energi dan kebutuhan kesehatan.', category: 'fitness', xpReward: 10, durationMinutes: 20 },
+      { id: 'daily_priorities', group: 'Pagi: Menyiapkan Diri', name: 'Tentukan tiga prioritas hari ini', detail: 'Pilih target yang realistis untuk kerja, belajar, dan keluarga.', category: 'productivity', xpReward: 10, durationMinutes: 5 },
+      { id: 'focused_learning', group: 'Pagi: Fokus Belajar atau Kerja', name: 'Belajar fokus selama 25 menit', detail: 'Pilih satu topik; jauhkan distraksi selama satu sesi.', category: 'reading', xpReward: 25, durationMinutes: 25 },
+      { id: 'read_pages', group: 'Pagi: Fokus Belajar atau Kerja', name: 'Membaca buku 10 halaman', detail: 'Baca buku yang menambah ilmu atau keterampilan.', category: 'reading', xpReward: 10, durationMinutes: 15 },
+      { id: 'deep_work', group: 'Pagi: Fokus Belajar atau Kerja', name: 'Selesaikan satu tugas terpenting', detail: 'Kerjakan dengan jujur, tekun, dan jeda yang cukup.', category: 'productivity', xpReward: 25, durationMinutes: 50 },
+      { id: 'eye_break', group: 'Pagi: Fokus Belajar atau Kerja', name: 'Istirahatkan mata dan ubah posisi duduk', detail: 'Ambil jeda singkat secara berkala saat belajar atau bekerja.', category: 'fitness', xpReward: 10, durationMinutes: 5 },
+      { id: 'dhuhr_prayer', group: 'Siang: Zuhur & Istirahat', name: 'Sholat Zuhur sesuai waktu setempat', detail: 'Sesuaikan dengan jadwal adzan dan tanggung jawab harian.', category: 'worship', xpReward: 25, durationMinutes: 10 },
+      { id: 'mindful_lunch', group: 'Siang: Zuhur & Istirahat', name: 'Makan siang dengan tenang', detail: 'Berhenti sejenak dari layar dan nikmati makanan secukupnya.', category: 'fitness', xpReward: 10, durationMinutes: 25 },
+      { id: 'short_walk', group: 'Siang: Zuhur & Istirahat', name: 'Berjalan ringan setelah duduk lama', detail: 'Gerakkan tubuh beberapa menit sesuai kemampuan.', category: 'fitness', xpReward: 10, durationMinutes: 5 },
+      { id: 'review_progress', group: 'Siang: Zuhur & Istirahat', name: 'Tinjau progres dan atur ulang prioritas', detail: 'Sesuaikan rencana jika kondisi hari ini berubah.', category: 'productivity', xpReward: 10, durationMinutes: 5 },
+      { id: 'asr_prayer', group: 'Sore: Asar & Aktivitas', name: 'Sholat Asar sesuai waktu setempat', detail: 'Gunakan jadwal adzan di lokasi Anda.', category: 'worship', xpReward: 25, durationMinutes: 10 },
+      { id: 'afternoon_exercise', group: 'Sore: Asar & Aktivitas', name: 'Jalan kaki atau olahraga ringan', detail: 'Target 15–30 menit; pilih intensitas yang aman bagi tubuh.', category: 'fitness', xpReward: 25, durationMinutes: 25 },
+      { id: 'help_at_home', group: 'Sore: Asar & Aktivitas', name: 'Bantu satu pekerjaan rumah', detail: 'Ambil bagian dalam tanggung jawab bersama.', category: 'other', xpReward: 10, durationMinutes: 15 },
+      { id: 'kindness', group: 'Sore: Asar & Aktivitas', name: 'Lakukan satu kebaikan untuk orang lain', detail: 'Sapa, dengarkan, bantu, atau hubungi orang yang membutuhkan.', category: 'meditation', xpReward: 10, durationMinutes: 5 },
+      { id: 'maghrib_prayer', group: 'Maghrib & Malam', name: 'Sholat Maghrib sesuai waktu setempat', detail: 'Gunakan jadwal adzan di lokasi Anda.', category: 'worship', xpReward: 25, durationMinutes: 10 },
+      { id: 'quran_reflection', group: 'Maghrib & Malam', name: 'Tilawah dan renungkan satu pelajaran', detail: 'Baca beberapa ayat dan catat hal yang ingin diamalkan.', category: 'worship', xpReward: 25, durationMinutes: 15 },
+      { id: 'family_time', group: 'Maghrib & Malam', name: 'Luangkan waktu berkualitas bersama keluarga', detail: 'Dengarkan dan berbincang tanpa terburu-buru.', category: 'other', xpReward: 10, durationMinutes: 30 },
+      { id: 'isha_prayer', group: 'Maghrib & Malam', name: 'Sholat Isya sesuai waktu setempat', detail: 'Gunakan jadwal adzan di lokasi Anda.', category: 'worship', xpReward: 25, durationMinutes: 10 },
+      { id: 'gratitude_review', group: 'Menjelang Tidur', name: 'Muhasabah dan catat hal yang disyukuri', detail: 'Tinjau hari dengan jujur tanpa menghakimi diri berlebihan.', category: 'meditation', xpReward: 10, durationMinutes: 5 },
+      { id: 'tomorrow_plan', group: 'Menjelang Tidur', name: 'Siapkan satu prioritas untuk besok', detail: 'Siapkan kebutuhan esok agar pagi lebih tenang.', category: 'productivity', xpReward: 10, durationMinutes: 5 },
+      { id: 'screen_break', group: 'Menjelang Tidur', name: 'Kurangi layar sebelum tidur', detail: 'Coba jeda dari gawai 30 menit sebelum beristirahat.', category: 'fitness', xpReward: 10, durationMinutes: 30 },
+      { id: 'sleep_routine', group: 'Menjelang Tidur', name: 'Tidur cukup dan teratur', detail: 'Jaga waktu istirahat; sesuaikan durasi dengan kebutuhan pribadi.', category: 'fitness', xpReward: 25, durationMinutes: 480 }
     ];
 
     // Level Rank Titles
@@ -735,11 +825,20 @@
         if (!document.getElementById('statsTab').classList.contains('hidden')) renderWeeklyChart();
       });
       
-      const today = new Date();
-      const options = { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' };
-      document.getElementById('currentDateDisplay').innerText = today.toLocaleDateString('id-ID', options);
+      updateDateTime();
+      window.setInterval(updateDateTime, 1000);
       window.setTimeout(finishSplash, 1500);
     };
+
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById('currentDateDisplay').innerText = now.toLocaleDateString('id-ID', {
+        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+      });
+      document.getElementById('currentTimeDisplay').innerText = [
+        now.getHours(), now.getMinutes(), now.getSeconds()
+      ].map(value => String(value).padStart(2, '0')).join(':');
+    }
 
     function finishSplash() {
       const splash = document.getElementById('splashScreen');
@@ -786,8 +885,8 @@
       }
       if (!data) {
         state.habits = [
-          { id: '1', name: 'Tilawah Al-Qur’an 10 menit', category: 'worship', xpReward: 25, history: {} },
-          { id: '2', name: 'Membaca buku 15 menit', category: 'reading', xpReward: 25, history: {} }
+          { id: '1', name: 'Tilawah Al-Qur’an 10 menit', category: 'worship', xpReward: 25, durationMinutes: 10, history: {} },
+          { id: '2', name: 'Membaca buku 15 menit', category: 'reading', xpReward: 25, durationMinutes: 15, history: {} }
         ];
       }
     }
@@ -801,6 +900,17 @@
 
     function getTodayKey() {
       return getDateKey(new Date());
+    }
+
+    function formatDuration(durationMinutes) {
+      const totalMinutes = Number(durationMinutes);
+      if (!Number.isFinite(totalMinutes) || totalMinutes < 1) return 'Durasi belum diatur';
+
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      if (hours && minutes) return `${hours} jam ${minutes} menit`;
+      if (hours) return `${hours} jam`;
+      return `${minutes} menit`;
     }
 
     function isHabitScheduled(habit, date) {
@@ -926,6 +1036,7 @@
                     <i data-lucide="flame" class="w-3 h-3 fill-amber-400"></i> ${getHabitStreak(habit)} Hari
                   </span>
                   ${habit.timeBlock ? `<span class="text-[10px] text-neonGreen">${escapeHtml(habit.timeBlock)}</span>` : ''}
+                  <span class="text-[10px] text-slate-300">${formatDuration(habit.durationMinutes)}</span>
                   <span class="text-[10px] text-neonCyan font-mono-tech">• +${xpAmount} XP</span>
                   <span class="text-[10px] text-slate-500 font-mono-tech">[${escapeHtml(catInfo.label)}]</span>
                   ${habit.frequency === 'weekdays' ? '<span class="text-[10px] text-slate-500">Hari kerja</span>' : ''}
@@ -1003,6 +1114,7 @@
         document.getElementById('habitNameInput').value = habit.name;
         document.getElementById('habitXpReward').value = String(habit.xpReward || 25);
         document.getElementById('habitFrequency').value = habit.frequency || 'daily';
+        document.getElementById('habitDurationMinutes').value = String(habit.durationMinutes || 15);
 
         if (Object.prototype.hasOwnProperty.call(CATEGORY_MAP, habit.category)) {
           categorySelect.value = habit.category;
@@ -1042,7 +1154,7 @@
                   <span class="min-w-0 flex-1">
                     <span class="flex justify-between gap-2 text-xs font-semibold text-slate-100">
                       <span>${escapeHtml(template.name)}</span>
-                      <span class="shrink-0 text-neonCyan">${template.xpReward} poin</span>
+                      <span class="shrink-0 text-neonCyan">${formatDuration(template.durationMinutes)}</span>
                     </span>
                     <span class="block text-[11px] text-slate-400 mt-1">${escapeHtml(template.detail)}</span>
                     ${alreadyAdded ? '<span class="block text-[10px] text-neonGreen mt-1">Sudah ada di daftar</span>' : ''}
@@ -1082,6 +1194,7 @@
           category: template.category,
           xpReward: template.xpReward,
           frequency: 'daily',
+          durationMinutes: template.durationMinutes,
           timeBlock: template.group,
           detail: template.detail,
           history: {}
@@ -1106,8 +1219,13 @@
       const customCat = document.getElementById('customCategoryInput').value.trim();
       const xpReward = parseInt(document.getElementById('habitXpReward').value) || 25;
       const frequency = document.getElementById('habitFrequency').value;
+      const durationMinutes = Number(document.getElementById('habitDurationMinutes').value);
 
       if (!name) return;
+      if (!Number.isInteger(durationMinutes) || durationMinutes < 1 || durationMinutes > 1440) {
+        document.getElementById('habitDurationMinutes').focus();
+        return;
+      }
       if (catSelect === 'custom' && !customCat) {
         document.getElementById('customCategoryInput').focus();
         return;
@@ -1120,7 +1238,7 @@
 
       if (editingHabitId) {
         const habit = state.habits.find(item => item.id === editingHabitId);
-        if (habit) Object.assign(habit, { name, category: categoryKey, xpReward, frequency });
+        if (habit) Object.assign(habit, { name, category: categoryKey, xpReward, frequency, durationMinutes });
       } else {
         state.habits.push({
           id: Date.now().toString(),
@@ -1128,6 +1246,7 @@
           category: categoryKey,
           xpReward,
           frequency,
+          durationMinutes,
           history: {}
         });
       }
@@ -1320,6 +1439,196 @@
       `).join('');
 
       initLucide();
+    }
+
+    function openFocusTools() {
+      openModal('focusToolsModal');
+      initLucide();
+    }
+
+    function switchFocusMode(mode) {
+      if (mode === focusMode) return;
+      if (stopwatchIntervalId !== null) pauseStopwatch();
+      if (timerIntervalId !== null) pauseTimer();
+
+      focusMode = mode;
+      const stopwatchActive = mode === 'stopwatch';
+      document.getElementById('stopwatchPanel').classList.toggle('hidden', !stopwatchActive);
+      document.getElementById('timerPanel').classList.toggle('hidden', stopwatchActive);
+      document.getElementById('stopwatchModeButton').setAttribute('aria-selected', String(stopwatchActive));
+      document.getElementById('timerModeButton').setAttribute('aria-selected', String(!stopwatchActive));
+      document.getElementById('stopwatchModeButton').className = `py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-2 ${stopwatchActive ? 'bg-slate-800 text-neonGreen shadow' : 'text-slate-400 hover:text-slate-200'}`;
+      document.getElementById('timerModeButton').className = `py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-2 ${!stopwatchActive ? 'bg-slate-800 text-neonGreen shadow' : 'text-slate-400 hover:text-slate-200'}`;
+    }
+
+    function formatStopwatchTime(milliseconds) {
+      const totalCentiseconds = Math.floor(milliseconds / 10);
+      const centiseconds = totalCentiseconds % 100;
+      const totalSeconds = Math.floor(totalCentiseconds / 100);
+      const seconds = totalSeconds % 60;
+      const minutes = Math.floor(totalSeconds / 60) % 60;
+      const hours = Math.floor(totalSeconds / 3600);
+      return [hours, minutes, seconds].map(value => String(value).padStart(2, '0')).join(':') + `.${String(centiseconds).padStart(2, '0')}`;
+    }
+
+    function updateStopwatchDisplay() {
+      if (stopwatchIntervalId !== null) stopwatchElapsedMs = performance.now() - stopwatchStartedAt;
+      document.getElementById('stopwatchDisplay').innerText = formatStopwatchTime(stopwatchElapsedMs);
+    }
+
+    function setStopwatchButton(running) {
+      const button = document.getElementById('stopwatchToggleButton');
+      const label = running ? 'Jeda' : stopwatchElapsedMs > 0 ? 'Lanjutkan' : 'Mulai';
+      const icon = running ? 'pause' : 'play';
+      button.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4"></i> ${label}`;
+      initLucide();
+    }
+
+    function toggleStopwatch() {
+      if (stopwatchIntervalId !== null) {
+        pauseStopwatch();
+        return;
+      }
+
+      stopwatchStartedAt = performance.now() - stopwatchElapsedMs;
+      stopwatchIntervalId = window.setInterval(updateStopwatchDisplay, 30);
+      document.getElementById('stopwatchStatus').innerText = 'Stopwatch berjalan.';
+      setStopwatchButton(true);
+    }
+
+    function pauseStopwatch() {
+      if (stopwatchIntervalId === null) return;
+      stopwatchElapsedMs = performance.now() - stopwatchStartedAt;
+      window.clearInterval(stopwatchIntervalId);
+      stopwatchIntervalId = null;
+      updateStopwatchDisplay();
+      document.getElementById('stopwatchStatus').innerText = 'Stopwatch dijeda.';
+      setStopwatchButton(false);
+    }
+
+    function resetStopwatch() {
+      window.clearInterval(stopwatchIntervalId);
+      stopwatchIntervalId = null;
+      stopwatchElapsedMs = 0;
+      stopwatchLaps = [];
+      updateStopwatchDisplay();
+      document.getElementById('stopwatchStatus').innerText = 'Siap menghitung waktu.';
+      document.getElementById('stopwatchLaps').innerHTML = '';
+      setStopwatchButton(false);
+    }
+
+    function recordStopwatchLap() {
+      updateStopwatchDisplay();
+      if (stopwatchElapsedMs < 1) return;
+      const previousLapTotal = stopwatchLaps.length ? stopwatchLaps[stopwatchLaps.length - 1].totalMs : 0;
+      stopwatchLaps.push({ totalMs: stopwatchElapsedMs, lapMs: stopwatchElapsedMs - previousLapTotal });
+      document.getElementById('stopwatchLaps').innerHTML = stopwatchLaps.slice().reverse().map((lap, index) => `
+        <li class="flex justify-between gap-4 py-2 text-xs font-mono-tech">
+          <span class="text-slate-400">Putaran ${stopwatchLaps.length - index}</span>
+          <span class="text-slate-200">${formatStopwatchTime(lap.lapMs)} <span class="text-slate-500">(${formatStopwatchTime(lap.totalMs)})</span></span>
+        </li>
+      `).join('');
+    }
+
+    function getTimerInputDurationMs() {
+      const minutes = Number(document.getElementById('timerMinutesInput').value) || 0;
+      const seconds = Number(document.getElementById('timerSecondsInput').value) || 0;
+      const totalSeconds = minutes * 60 + seconds;
+      return Number.isInteger(minutes) && Number.isInteger(seconds) && minutes >= 0 && minutes <= 1440 && seconds >= 0 && seconds <= 59 && totalSeconds <= 86400
+        ? totalSeconds * 1000
+        : 0;
+    }
+
+    function formatTimerTime(milliseconds) {
+      const totalSeconds = Math.max(0, Math.ceil(milliseconds / 1000));
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor(totalSeconds / 60) % 60;
+      const seconds = totalSeconds % 60;
+      return [hours, minutes, seconds].map(value => String(value).padStart(2, '0')).join(':');
+    }
+
+    function updateTimerDisplay() {
+      const milliseconds = timerIntervalId !== null
+        ? Math.max(0, timerDeadline - Date.now())
+        : timerRemainingMs === null ? getTimerInputDurationMs() : timerRemainingMs;
+      document.getElementById('timerDisplay').innerText = formatTimerTime(milliseconds);
+    }
+
+    function setTimerButton(label, icon) {
+      document.getElementById('timerToggleButton').innerHTML = `<i data-lucide="${icon}" class="w-4 h-4"></i> ${label}`;
+      initLucide();
+    }
+
+    function handleTimerInput() {
+      if (timerIntervalId !== null) return;
+      timerRemainingMs = null;
+      document.getElementById('timerStatus').innerText = getTimerInputDurationMs() > 0 ? 'Timer siap dimulai.' : 'Masukkan durasi hingga 24 jam.';
+      updateTimerDisplay();
+    }
+
+    function toggleTimer() {
+      if (timerIntervalId !== null) {
+        pauseTimer();
+        return;
+      }
+
+      const duration = timerRemainingMs === null || timerRemainingMs === 0
+        ? getTimerInputDurationMs()
+        : timerRemainingMs;
+      if (duration < 1000) {
+        document.getElementById('timerStatus').innerText = 'Masukkan durasi minimal 1 detik.';
+        return;
+      }
+
+      timerRemainingMs = duration;
+      timerDeadline = Date.now() + duration;
+      document.getElementById('timerMinutesInput').disabled = true;
+      document.getElementById('timerSecondsInput').disabled = true;
+      document.getElementById('timerStatus').innerText = 'Timer berjalan.';
+      setTimerButton('Jeda', 'pause');
+      updateTimerDisplay();
+      timerIntervalId = window.setInterval(tickTimer, 100);
+    }
+
+    function tickTimer() {
+      timerRemainingMs = Math.max(0, timerDeadline - Date.now());
+      if (timerRemainingMs === 0) {
+        window.clearInterval(timerIntervalId);
+        timerIntervalId = null;
+        document.getElementById('timerMinutesInput').disabled = false;
+        document.getElementById('timerSecondsInput').disabled = false;
+        document.getElementById('timerStatus').innerText = 'Waktu selesai.';
+        setTimerButton('Mulai lagi', 'play');
+        playBeep('complete');
+      }
+      updateTimerDisplay();
+    }
+
+    function pauseTimer() {
+      if (timerIntervalId === null) return;
+      timerRemainingMs = Math.max(0, timerDeadline - Date.now());
+      window.clearInterval(timerIntervalId);
+      timerIntervalId = null;
+      document.getElementById('timerMinutesInput').disabled = false;
+      document.getElementById('timerSecondsInput').disabled = false;
+      if (timerRemainingMs === 0) {
+        tickTimer();
+        return;
+      }
+      document.getElementById('timerStatus').innerText = 'Timer dijeda.';
+      setTimerButton('Lanjutkan', 'play');
+      updateTimerDisplay();
+    }
+
+    function resetTimer() {
+      window.clearInterval(timerIntervalId);
+      timerIntervalId = null;
+      timerRemainingMs = null;
+      document.getElementById('timerMinutesInput').disabled = false;
+      document.getElementById('timerSecondsInput').disabled = false;
+      document.getElementById('timerStatus').innerText = 'Atur durasi lalu tekan Mulai.';
+      setTimerButton('Mulai', 'play');
+      updateTimerDisplay();
     }
 
     // --- UI NAVIGATION & MODALS ---
