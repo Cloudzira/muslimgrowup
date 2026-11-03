@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Muslim Grow Up - Tracker Kebiasaan</title>
+  <meta name="theme-color" id="themeColorMeta" content="#101815">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Muslim Grow Up">
+  <link rel="icon" type="image/svg+xml" href="./assets/icon.svg">
+  <link rel="apple-touch-icon" href="./assets/icon-192.png">
+  <link rel="manifest" href="./manifest.webmanifest">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -466,6 +472,9 @@
         <button onclick="openModal('aboutModal')" title="Informasi aplikasi" aria-label="Informasi aplikasi" class="p-2.5 rounded-xl glass-card hover:border-neonGreen transition text-slate-300">
           <i data-lucide="info" class="w-5 h-5"></i>
         </button>
+        <button id="installAppButton" onclick="installApp()" title="Instal Muslim Grow Up" aria-label="Instal Muslim Grow Up" class="p-2.5 rounded-xl glass-card hover:border-neonGreen transition text-neonGreen">
+          <i data-lucide="download" class="w-5 h-5"></i>
+        </button>
         <button onclick="openSettingsModal()" title="Pengaturan" aria-label="Pengaturan" class="p-2.5 rounded-xl glass-card hover:border-neonCyan transition text-slate-300">
           <i data-lucide="settings" class="w-5 h-5"></i>
         </button>
@@ -720,6 +729,20 @@
     </section>
   </div>
 
+  <div id="installHelpModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="installHelpTitle">
+    <section class="glass-panel p-5 sm:p-6 rounded-2xl w-full max-w-md border border-slate-700 shadow-2xl">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-[10px] font-mono-tech text-neonGreen">MUSLIM GROW UP</p>
+          <h2 id="installHelpTitle" class="text-lg font-bold text-slate-100 mt-1">Instal aplikasi</h2>
+        </div>
+        <button onclick="closeModal('installHelpModal')" title="Tutup" aria-label="Tutup informasi instalasi" class="p-1 text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <p id="installHelpMessage" class="text-sm text-slate-300 mt-4 leading-relaxed"></p>
+      <button onclick="closeModal('installHelpModal')" class="mt-5 w-full bg-neonGreen text-slate-950 font-semibold text-sm py-2.5 rounded-xl">Mengerti</button>
+    </section>
+  </div>
+
   <!-- MODAL: STOPWATCH & TIMER -->
   <div id="focusToolsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <section class="glass-panel p-5 sm:p-6 rounded-2xl w-full max-w-md border border-slate-700 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="focusToolsTitle">
@@ -970,6 +993,7 @@
     let timerRemainingMs = null;
     let timerDeadline = 0;
     let timerIntervalId = null;
+    let deferredInstallPrompt = null;
 
     // Category Styling Map
     const CATEGORY_MAP = {
@@ -1068,6 +1092,17 @@
       }
     }
 
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      document.getElementById('installAppButton').setAttribute('aria-label', 'Muslim Grow Up sudah terpasang');
+      document.getElementById('installAppButton').title = 'Aplikasi sudah terpasang';
+    });
+
     // --- INITIALIZATION ---
     window.onload = function() {
       loadState();
@@ -1082,6 +1117,7 @@
       updateDateTime();
       window.setInterval(updateDateTime, 1000);
       window.setTimeout(finishSplash, 1500);
+      registerServiceWorker();
     };
 
     function updateDateTime() {
@@ -1104,6 +1140,8 @@
 
       const themeSelect = document.getElementById('themeSelect');
       if (themeSelect) themeSelect.value = state.theme;
+      const themeColor = { dark: '#101815', light: '#eef5f0', feminine: '#fff4f7' }[state.theme];
+      document.getElementById('themeColorMeta').content = themeColor;
     }
 
     function finishSplash() {
@@ -1112,6 +1150,33 @@
       splash.classList.add('is-leaving');
       splash.setAttribute('aria-hidden', 'true');
       window.setTimeout(() => splash.remove(), 500);
+    }
+
+    function registerServiceWorker() {
+      const localHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+      if (!('serviceWorker' in navigator) || (!window.isSecureContext && !localHost)) return;
+      navigator.serviceWorker.register('./sw.js').catch(error => {
+        console.warn('Service worker tidak dapat didaftarkan.', error);
+      });
+    }
+
+    async function installApp() {
+      if (deferredInstallPrompt) {
+        await deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        return;
+      }
+
+      const helpMessage = document.getElementById('installHelpMessage');
+      if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+        helpMessage.innerText = 'Muslim Grow Up sudah terpasang di perangkat ini.';
+      } else if (window.location.protocol === 'file:') {
+        helpMessage.innerText = 'Aplikasi belum bisa dipasang dari berkas lokal. Buka melalui alamat HTTPS atau localhost, lalu gunakan tombol Instal. Browser akan menampilkan konfirmasi pemasangan.';
+      } else {
+        helpMessage.innerText = 'Jika dialog instalasi belum muncul, pastikan halaman menggunakan HTTPS dan service worker sudah aktif. Anda juga dapat memilih “Instal aplikasi” dari menu browser.';
+      }
+      openModal('installHelpModal');
     }
 
     function initLucide() {

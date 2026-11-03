@@ -20,6 +20,8 @@ Muslim Grow Up is a lightweight habit tracker for building spiritual, learning, 
 
 Open `index.html` in a modern browser. The interface loads Tailwind CSS and Lucide icons from CDNs, so an internet connection is needed for full styling and icons.
 
+To install it as an app, host the files on HTTPS or open them from `localhost`, then use the install button in the header and accept the browser prompt. Opening the HTML directly as `file://` supports normal use but not PWA installation. On iOS, use the browser's Share menu and choose Add to Home Screen.
+
 The app does not require an account or server. Habit history is saved in the current browser's local storage and does not sync between devices. Export a backup before clearing browser data or switching browsers.
 
 ## Technology
