@@ -8,6 +8,7 @@ Muslim Grow Up is a lightweight habit tracker for building spiritual, learning, 
 - Choose from a full-day agenda template, from waking up through bedtime, spanning worship, learning, health, work, reflection, and family life.
 - View a live local clock with the current weekday and date, and set a target duration for each activity.
 - Use a stopwatch with lap tracking and a countdown timer with pause, resume, reset, and restart controls.
+- Set a greeting name and sound preference in Settings; open app information and the usage guide from the header.
 - Record daily check-ins and track consecutive scheduled days.
 - Review a 7-day activity chart, a 30-day heatmap, levels, and achievement badges.
 - Export and import a JSON backup from Settings.
